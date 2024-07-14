@@ -17,6 +17,7 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
+
     'admin'=>[
         'driver'=>'eloquent',
         'model'=>App\Models\Admin::class,
@@ -92,7 +93,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
@@ -107,6 +107,8 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Seller::class,
         ],
+
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
