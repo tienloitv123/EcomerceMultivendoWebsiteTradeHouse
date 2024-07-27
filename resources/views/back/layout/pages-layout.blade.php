@@ -250,7 +250,7 @@
 								><i class="dw dw-help"></i> Help</a
 							>
 							<a class="dropdown-item" href="{{route('admin.logout_handler') }}"
-								onclick="event.preventDefault();document.getElementsById('adminLogoutForm').submit();"><i class="dw dw-logout"></i> Log Out</a
+								onclick="event.preventDefault();document.getElementById('adminLogoutForm').submit();"><i class="dw dw-logout"></i> Log Out</a
 							>
                             <form action="{{route('admin.logout_handler') }}" id="adminLogoutForm" method="POST" >@csrf</form>
 						</div>
