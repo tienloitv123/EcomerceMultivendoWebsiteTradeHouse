@@ -195,4 +195,12 @@ class AdminController extends Controller
         sendEmail($mailConfig);
         return redirect()->route('admin.login')->with('success','Done!, Your password has been changed. Use new password to login into system.');
     }
+
+    public function profileView(Request $request){
+        $admin = null;
+        if( Auth::guard('admin')->check() ){
+            $admin = Admin::findOrFail(auth()->id());
+        }
+        return view('back.page.admin.profile', compact('admin'));
+    }
 }
