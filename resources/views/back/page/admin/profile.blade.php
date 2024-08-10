@@ -54,6 +54,22 @@
             $('#adminProfileEmail').html(event.detail[0].adminEmail);
         });
 
+        $('input[type="file"][name="adminProfilePictureFile"][id="adminProfilePictureFile"]').ijaboCropTool({
+          preview : '#adminProfilePicture',
+          setRatio:1,
+          allowedExtensions: ['jpg', 'jpeg','png'],
+          buttonsText:['CROP','QUIT'],
+          buttonsColor:['#30bf7d','#ee5155', -15],
+          processUrl:'{{ route("admin.change-profile-picture") }}',
+          withCSRF:['_token','{{ csrf_token() }}'],
+          onSuccess:function(message, element, status){
+            Livewire.dispatch('updateAdminSellerHeaderInfo');
+            alert(message);
+          },
+          onError:function(message, element, status){
+            alert(message);
+          }
+       });
     </script>
 @endpush
 

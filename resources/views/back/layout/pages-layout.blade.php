@@ -60,6 +60,7 @@
 		</script>
 		<!-- End Google Tag Manager -->
         <link rel="stylesheet" href="/extra-assets/ijabo/ijabo.min.css">
+        <link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
         @livewireStyles
         @stack('stylesheets')
 	</head>
@@ -425,8 +426,6 @@
 					<ul id="accordion-menu">
 
                         @if (Route::is('admin.*'))
-
-
 						<li>
 							<a href="{{route('admin.home')}}" class="dropdown-toggle no-arrow">
 								<span class="micon fa fa-home"></span
@@ -456,6 +455,15 @@
 								<span class="mtext"
 									>Profile</span>
 							</a>
+                            <a
+                            href=""
+                            target="_blank"
+                            class="dropdown-toggle no-arrow"
+                        >
+                            <span class="micon fa fa-user-plus"></span>
+                            <span class="mtext"
+                                >User manage</span>
+                        </a>
 						</li>
                         @else()
 
@@ -490,6 +498,7 @@
 								<span class="mtext"
 									>Profile</span>
 							</a>
+
 						</li>
                         @endif
 
@@ -502,7 +511,7 @@
 		<div class="main-container">
 			<div class="pd-ltr-20 xs-pd-20-10">
 				<div class="min-height-200px">
-					<div class="page-header">
+					{{-- <div class="page-header">
 						<div class="row">
 							<div class="col-md-6 col-sm-12">
 								<div class="title">
@@ -537,7 +546,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> --}}
 					<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
                         @yield('content')
                     </div>
@@ -567,6 +576,7 @@
 		</script>
 		<script src="/extra-assets/ijabo/ijabo.min.js"></script>
         <script src="/extra-assets/ijabo/jquery.ijaboViewer.min.js"></script>
+        <script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
         <script>
 			window.addEventListener('showToastr', function(event){
                   toastr.remove();
