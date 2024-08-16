@@ -1,6 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Models\GeneralSetting;
 
 // send Email by using phpmailer libary
 
@@ -29,5 +30,25 @@ if( !function_exists('sendEmail')){
         }else{
             return false;
         }
+    }
+}
+/** GET GENERAL SETTINGS */
+if( !function_exists('get_settings') ){
+    function get_settings(){
+        $results = null;
+        $settings = new GeneralSetting();
+        $settings_data = $settings->first();
+
+        if( $settings_data ){
+            $results = $settings_data;
+        }else{
+            $settings->insert([
+                'site_name'=>'Laravecom',
+                'site_email'=>'info@laravecom.test'
+            ]);
+            $new_settings_data = $settings->first();
+            $results = $new_settings_data;
+        }
+        return $results;
     }
 }

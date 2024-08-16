@@ -20,6 +20,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::view('/home','back.page.admin.home')->name('home');
         Route::post('/logout_handler',[AdminController::class,'logoutHandler'])->name('logout_handler');
         Route::get('/profile',[AdminController::class,'profileView'])->name('profile');
+        Route::view('/usermanage','back.page.admin.usermanage')->name('usermanage');
         Route::post('/change-profile-picture',[AdminController::class,'changeProfilePicture'])->name('change-profile-picture');
+        Route::view('/setting','back.page.setting')->name('setting');
     });
 });
