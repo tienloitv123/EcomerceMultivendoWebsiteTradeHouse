@@ -23,5 +23,6 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::view('/usermanage','back.page.admin.usermanage')->name('usermanage');
         Route::post('/change-profile-picture',[AdminController::class,'changeProfilePicture'])->name('change-profile-picture');
         Route::view('/setting','back.page.setting')->name('setting');
+        Route::post('/change-logo',[AdminController::class, 'changeLogo' ])->name('change-logo');
     });
 });

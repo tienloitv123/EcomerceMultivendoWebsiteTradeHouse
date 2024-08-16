@@ -3,16 +3,16 @@
     <div class="tab">
         <ul class="nav nav-tabs customtab" role="tablist">
             <li class="nav-item">
-                <a wire:click.prevent='selectTab("general_settings")' class="nav-link {{ $tab == 'general_settings' ? 'active' : '' }}" data-toggle="tab" href="#general_settings" role="tab" aria-selected="true">General settings</a>
+                <a wire:click.prevent='selectedTab("general_settings")' class="nav-link {{ $tab == 'general_settings' ? 'active' : '' }}" data-toggle="tab" href="#general_settings" role="tab" aria-selected="true">General settings</a>
             </li>
             <li class="nav-item">
-                <a  wire:click.prevent='selectTab("logo_favicon")' class="nav-link {{ $tab == 'logo_favicon' ? 'active' : '' }}" data-toggle="tab" href="#logo_favicon" role="tab" aria-selected="false">Logo & Favicon</a>
+                <a  wire:click.prevent='selectedTab("logo_favicon")' class="nav-link {{ $tab == 'logo_favicon' ? 'active' : '' }}" data-toggle="tab" href="#logo_favicon" role="tab" aria-selected="false">Logo & Favicon</a>
             </li>
             <li class="nav-item">
-                <a wire:click.prevent='selectTab("social_networks")' class="nav-link {{ $tab == 'social_networks' ? 'active' : '' }}" data-toggle="tab" href="#social_networks" role="tab" aria-selected="false">Social networks</a>
+                <a wire:click.prevent='selectedTab("social_networks")' class="nav-link {{ $tab == 'social_networks' ? 'active' : '' }}" data-toggle="tab" href="#social_networks" role="tab" aria-selected="false">Social networks</a>
             </li>
             <li class="nav-item">
-                <a wire:click.prevent='selectTab("payment_methods")' class="nav-link {{ $tab == 'payment_methods' ? 'active' : '' }}" data-toggle="tab" href="#payment_methods" role="tab" aria-selected="false">Payment methods</a>
+                <a wire:click.prevent='selectedTab("payment_methods")' class="nav-link {{ $tab == 'payment_methods' ? 'active' : '' }}" data-toggle="tab" href="#payment_methods" role="tab" aria-selected="false">Payment methods</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -68,7 +68,27 @@
                 </div>
             </div>
             <div class="tab-pane fade {{ $tab == 'logo_favicon' ? 'active show' : '' }}" id="logo_favicon" role="tabpanel">
-                ------ Payment methods ------
+                <div class="pd-20">
+                    <div class="row">
+                        <div class="col-md-6">
+                             <h5>Site logo</h5>
+                             <div class="mb-2 mt-1" style="max-width: 200px;">
+                                 <img wire:ignore src="" class="img-thumbnail" data-ijabo-default-img="/images/site/{{ $site_logo }}" id="site_logo_image_preview">
+                             </div>
+                             <form action="{{ route('admin.change-logo') }}" method="POST" enctype="multipart/form-data" id="change_site_logo_form">
+                              @csrf
+                              <div class="mb-2">
+                                <input type="file" name="site_logo" id="site_logo" class="form-control">
+                                <span class="text-danger error-text site_logo_error"></span>
+                              </div>
+                              <button type="submit" class="btn btn-primary">Change logo</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            --FavIcon
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade {{ $tab == 'social_networks' ? 'active show' : '' }}" id="social_networks" role="tabpanel">
                 ------ Payment methods ------

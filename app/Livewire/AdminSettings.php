@@ -26,6 +26,8 @@ class AdminSettings extends Component
         $this->site_phone = get_settings()->site_phone;
         $this->site_meta_keywords = get_settings()->site_meta_keywords;
         $this->site_meta_description = get_settings()->site_meta_description;
+        $this->site_logo = get_settings()->site_logo;
+        $this->site_favicon = get_settings()->site_favicon;
     }
     public function updateGeneralSettings(){
         $this->validate([
@@ -40,6 +42,8 @@ class AdminSettings extends Component
         $settings->site_phone = $this->site_phone;
         $settings->site_meta_keywords = $this->site_meta_keywords;
         $settings->site_meta_description = $this->site_meta_description;
+        $settings->site_logo = $this->site_logo;
+        $settings->site_favicon= $this->site_favicon;
         $update = $settings->save();
 
         if( $update ){

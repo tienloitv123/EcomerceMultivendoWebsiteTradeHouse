@@ -56,7 +56,7 @@
 			>
 				<div class="brand-logo">
 					<a href="login.html">
-						<img src="/back/vendors/images/deskapp-logo.svg" alt="" />
+						<img src="/images/site/{{get_settings()->site_logo}}" alt="" />
 					</a>
 				</div>
 				<div class="login-menu">
