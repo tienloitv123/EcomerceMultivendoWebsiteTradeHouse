@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\frontEndController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,4 +19,5 @@ Route::get('/', function () {
 
 Route::view('/example-page','example-pages');
 Route::view('/example-auth','example-auth');
+Route::view ('/example-frontend','example-frontend');
 

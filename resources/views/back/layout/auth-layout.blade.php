@@ -4,10 +4,10 @@
 	<head>
 		<!-- Basic Page Info -->
 		<meta charset="utf-8" />
-		<title>@yield('PageTitle')</title>
+		<title>@yield('pageTitle')</title>
 
 		<!-- Site favicon -->
-		<link
+		{{-- <link
 			rel="apple-touch-icon"
 			sizes="180x180"
 			href="/back/vendors/images/apple-touch-icon.png"
@@ -17,13 +17,9 @@
 			type="image/png"
 			sizes="32x32"
 			href="/back/vendors/images/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="/back/vendors/images/favicon-16x16.png"
-		/>
+		/> --}}
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/site/{{ get_settings()->site_favicon}}" />
+
 
 		<!-- Mobile Specific Metas -->
 		<meta
