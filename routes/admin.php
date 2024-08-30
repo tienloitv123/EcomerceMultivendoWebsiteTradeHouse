@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Middleware\PreventBackHistory;
 
 Route::prefix('admin')->name('admin.')->group(function(){
@@ -25,5 +26,17 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::view('/setting','back.page.setting')->name('setting');
         Route::post('/change-logo',[AdminController::class, 'changeLogo' ])->name('change-logo');
         Route::post('/change-favicon', [AdminController::class, 'changeFavicon' ])->name('change-favicon');
+        Route::view('/categories','back.page.admin.categories')->name('categories');
+
+
+        //CATEGORIES AND SUB CATEGORIES MANAGEMENT
+        Route::prefix('manage-categories')->name('manage-categories.')->group(function(){
+            Route::controller(CategoriesController::class)->group(function(){
+                Route::get('/','catSubcatList')->name('cats-subcats-list');
+                Route::get('/add-category','addCategory')->name('add-category');
+                Route::post('/store-category','storeCategory')->name('store-category');
+            });
+         });
+
     });
 });

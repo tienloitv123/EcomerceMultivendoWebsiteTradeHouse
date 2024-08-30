@@ -13,7 +13,7 @@
 
                     <button type="button" class="close" data-dismiss="arlert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button>   
 
                 </div>
             @endif

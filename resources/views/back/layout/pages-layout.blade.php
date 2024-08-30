@@ -9,7 +9,7 @@
     <!-- Site favicon -->
     {{-- <link rel="apple-touch-icon" sizes="180x180" href="/back/vendors/images/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/back/vendors/images/favicon-32x32.png" /> --}}
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/site/{{ get_settings()->site_favicon}}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/site/{{ get_settings()->site_favicon }}" />
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -177,8 +177,8 @@
 
 
             <div class="github-link">
-                <a href="https://github.com/dropways/deskapp" target="_blank"><img
-                        src="/back/vendors/images/github.svg" alt="" /></a>
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="/back/vendors/images/github.svg"
+                        alt="" /></a>
             </div>
         </div>
     </div>
@@ -281,8 +281,8 @@
     <div class="left-side-bar">
         <div class="brand-logo">
             <a href="index.html">
-                <img src="/images/site/{{get_settings()->site_logo}}" alt="" class="dark-logo" />
-                <img src="/images/site/{{get_settings()->site_logo}}" alt="" class="light-logo" />
+                <img src="/images/site/{{ get_settings()->site_logo }}" alt="" class="dark-logo" />
+                <img src="/images/site/{{ get_settings()->site_logo }}" alt="" class="light-logo" />
             </a>
             <div class="close-sidebar" data-toggle="left-sidebar-close">
                 <i class="ion-close-round"></i>
@@ -304,6 +304,14 @@
                             <a href="invoice.html" class="dropdown-toggle no-arrow">
                                 <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
                             </a>
+
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.manage-categories.cats-subcats-list') }}"
+                                class="dropdown-toggle no-arrow {{ Route::is('admin.manage-categories.*') ? 'active' : '' }}">
+                                <span class="micon dw dw-align-left3"></span><span class="mtext">Manage
+                                    Categories</span>
+                            </a>
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
@@ -318,11 +326,14 @@
                                 <span class="micon fa fa-user"></span>
                                 <span class="mtext">Profile</span>
                             </a>
-                            <a href="{{ route('admin.usermanage')}}"  class="dropdown-toggle no-arrow {{ Route::is('admin.usermanage') ? 'active' : '' }}">
+                            <a href="{{ route('admin.usermanage') }}"
+                                class="dropdown-toggle no-arrow {{ Route::is('admin.usermanage') ? 'active' : '' }}">
                                 <span class="micon fa fa-user-plus"></span>
                                 <span class="mtext">User manage</span>
                             </a>
-                            <a href="{{ route('admin.setting')}}" class="dropdown-toggle no-arrow {{ Route::is('admin.setting') ?  'active' : ''}} ">
+
+                            <a href="{{ route('admin.setting') }}"
+                                class="dropdown-toggle no-arrow {{ Route::is('admin.setting') ? 'active' : '' }} ">
                                 <span class="micon fa fa-cog"></span>
                                 <span class="mtext">Setting</span>
                             </a>
