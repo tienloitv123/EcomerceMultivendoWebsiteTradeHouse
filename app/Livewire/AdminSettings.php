@@ -12,7 +12,7 @@ class AdminSettings extends Component
     public $default_tab = 'general_settings';
     protected $queryString = ['tab'=>['keep'=>true]];
     public $site_name, $site_email, $site_phone, $site_meta_keywords, $site_meta_description, $site_logo, $site_favicon, $site_address;
-   public $facebook_url, $twitter_url, $instagram_url, $youtube_url, $github_url, $linkedin_url;
+    public $facebook_url, $twitter_url, $instagram_url, $youtube_url, $github_url, $linkedin_url;
 
     protected $querryString = ['tab'];
 

@@ -1,7 +1,9 @@
 @extends('front.layout.pages-layout')
-@section('pageTitle', isset($pageTitle) ? $pageTitle : 'Lmao')
- @section('content')
- <section class="home-section pt-2">
+@section('pageTitle', isset($pageTitle) ? $pageTitle : 'Page title')
+@section('content')
+
+<!-- Home Section Start -->
+<section class="home-section pt-2">
     <div class="container-fluid-lg">
         <div class="row g-4">
             <div class="col-xl-8 ratio_65">
@@ -1798,4 +1800,6 @@
         </div>
     </div>
 </section>
+<!-- Product Section End -->
+
 @endsection

@@ -14,10 +14,11 @@ use App\Http\Controllers\frontEndController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('front.page.home');
 });
 
 Route::view('/example-page','example-pages');
 Route::view('/example-auth','example-auth');
 Route::view ('/example-frontend','example-frontend');
+Route::view('/homepage','front.page.home' );
 

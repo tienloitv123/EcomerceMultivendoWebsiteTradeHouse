@@ -3,6 +3,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use App\Models\GeneralSetting;
 use App\Models\SocialNetwork;
+use App\Models\Category;
+use App\Models\SubCategory;
 
 // send Email by using phpmailer libary
 
@@ -44,8 +46,8 @@ if( !function_exists('get_settings') ){
             $results = $settings_data;
         }else{
             $settings->insert([
-                'site_name'=>'Laravecom',
-                'site_email'=>'info@laravecom.test'
+                'site_name'=>'LamTienLoi',
+                'site_email'=>'lamtienloitv@gmail.com'
             ]);
             $new_settings_data = $settings->first();
             $results = $new_settings_data;
@@ -76,6 +78,13 @@ if( !function_exists('get_social_network') ){
             $results = $new_social_network_data;
         }
         return $results;
+    }
+}
+/** GET FRONT END CATEGORIES */
+if( !function_exists('get_categories') ){
+    function get_categories(){
+        $categories = Category::with('subcategories')->orderBy('ordering','asc')->get();
+        return !empty($categories) ? $categories : [];
     }
 }
 

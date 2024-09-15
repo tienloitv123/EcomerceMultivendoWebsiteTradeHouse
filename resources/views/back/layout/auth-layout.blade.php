@@ -46,18 +46,28 @@
 
 	</head>
 	<body class="login-page">
-		<div class="login-header box-shadow">
+			<div class="login-header box-shadow">
 			<div
 				class="container-fluid d-flex justify-content-between align-items-center"
 			>
 				<div class="brand-logo">
-					<a href="login.html">
-						<img src="/images/site/{{get_settings()->site_logo}}" alt="" />
+					<a href="/">
+						<img src="/images/site/{{ get_settings()->site_logo }}" alt="" />
 					</a>
 				</div>
 				<div class="login-menu">
 					<ul>
-						<li><a href="register.html">Register</a></li>
+						@if ( !Route::is('admin.*') )
+
+                        @if ( Route::is('seller.login') )
+                        <li><a href="{{ route('seller.register') }}">Register</a></li>
+                   @else
+                        <li><a href="{{ route('seller.login') }}">Login</a></li>
+                   @endif
+
+
+						@endif
+
 					</ul>
 				</div>
 			</div>
