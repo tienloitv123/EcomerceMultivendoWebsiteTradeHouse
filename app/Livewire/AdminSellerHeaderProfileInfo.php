@@ -21,7 +21,7 @@ class AdminSellerHeaderProfileInfo extends Component
             $this->admin = Admin::findOrFail(auth()->id());
         }
         if( Auth::guard('seller')->check() ){
-            $this->seller = Seller::findOrFail(auth()->id());
+            // $this->seller = Seller::findOrFail(auth()->id());
         }
     }
     public function render()

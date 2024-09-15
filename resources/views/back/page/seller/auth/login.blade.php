@@ -5,7 +5,7 @@
     <div class="login-title">
         <h2 class="text-center text-primary">Seller Login</h2>
     </div>
-    <form action="" method="POST">
+    <form action="{{ route('seller.login-handler') }}" method="POST">
        @csrf
        <x-arlet.form-arlet/>
         <div class="input-group custom">
@@ -39,7 +39,8 @@
             </div>
             <div class="col-6">
                 <div class="forgot-password">
-                    <a href="">Forgot Password</a>
+
+                    <a href="{{ route('seller.forgot-password') }}">Forgot Password</a>
                 </div>
             </div>
         </div>

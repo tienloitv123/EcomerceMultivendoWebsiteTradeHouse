@@ -58,9 +58,9 @@
                 <a class="dropdown-item" href="faq.html"
                     ><i class="dw dw-help"></i> Help</a
                 >
-                <a class="dropdown-item" href="login.html"
-                    ><i class="dw dw-logout"></i> Log Out</a
-                >
+                <a class="dropdown-item" href="{{ route('seller.logout') }}" onclick="event.preventDefault();document.getElementById('sellerLogoutForm').submit();"
+                ><i class="dw dw-logout"></i> Log Out</a>
+            <form action="{{ route('seller.logout') }}" id="sellerLogoutForm" method="POST">@csrf</form>
             </div>
         </div>
     </div>
