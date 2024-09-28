@@ -19,8 +19,8 @@
 
                             <div class="search-box">
                                 <div class="input-group">
-                                    <input type="search" class="form-control"
-                                        placeholder="What are you looking for?" aria-describedby="button-addon2">
+                                    <input type="search" class="form-control" placeholder="What are you looking for?"
+                                        aria-describedby="button-addon2">
                                     <button class="btn" type="button" id="button-addon2">
                                         <i class="icon-copy dw dw-search2"></i>
                                     </button>
@@ -134,7 +134,8 @@
                                             <div class="button-group">
                                                 <a href="cart.html" class="btn btn-sm cart-button">View
                                                     Cart</a>
-                                                <a href="checkout.html" class="btn btn-sm cart-button theme-bg-color
+                                                <a href="checkout.html"
+                                                    class="btn btn-sm cart-button theme-bg-color
                                         text-white">Checkout</a>
                                             </div>
                                         </div>
@@ -157,14 +158,17 @@
                                         <ul class="user-box-name">
                                             <li class="product-box-contain">
 
-                                                <a href="log-in.html"><i class="icon-copy dw dw-login"></i>
-                                                    Sign
-                                                    In</a>
+                                                <a href="{{route('admin.login')}}"><i class="icon-copy dw dw-login"></i>
+                                                   Admin Login In</a>
                                             </li>
-
                                             <li class="product-box-contain">
-                                                <a href="sign-up.html"><i class="icon-copy dw dw-user-2"></i>
-                                                    Register</a>
+
+                                                <a href="{{route('seller.login')}}"><i class="icon-copy dw dw-login"></i>
+                                                   Seller Log In</a>
+                                            </li>
+                                            <li class="product-box-contain">
+                                                <a href="{{route('seller.register')}}"><i class="icon-copy dw dw-user-2"></i>
+                                                   Seller Register</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -247,8 +251,8 @@
                                         </li>
 
                                         <li class="nav-item dropdown dropdown-mega">
-                                            <a class="nav-link dropdown-toggle ps-xl-2 ps-0"
-                                                href="javascript:void(0)" data-bs-toggle="dropdown">Shop</a>
+                                            <a class="nav-link dropdown-toggle ps-xl-2 ps-0" href="javascript:void(0)"
+                                                data-bs-toggle="dropdown">Shop</a>
 
                                             <div class="dropdown-menu dropdown-menu-2 row g-3">
                                                 <div class="dropdown-column col-xl-4">

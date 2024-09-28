@@ -13,7 +13,7 @@
                     </div>
                     <div class="home-detail p-center-left w-75">
                         <div>
-                            <h1 class="text-uppercase">Stay home &
+                            <h1 class="text-uppercase">Cyka Blyat &
                                 delivered your <span class="daily">Daily
                                     Needs</span></h1>
                             <p class="w-75 d-none d-sm-block">Justo
@@ -21,9 +21,6 @@
                                 ut
                                 bibendum vivamus penatibus pretium dis
                                 duis dictumst elementum cum felis.</p>
-                            <button onclick="location.href = 'javascript:void(0)';"
-                                class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop
-                                Now <i class="fa fa-arrow-right icon"></i></button>
                         </div>
                     </div>
                 </div>
@@ -44,8 +41,6 @@
                                     <p class="w-75">Feugiat augue porta
                                         netus cubilia litora pulvinar
                                         habitasse</p>
-                                    <a href="javascript:void(0)" class="shop-button">Shop Now <i
-                                            class="fa fa-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -62,8 +57,7 @@
                                         congue</h4>
                                     <p class="organic">Hac fermentum
                                         phasellus neque sed faucibus</p>
-                                    <a href="javascript:void(0)" class="shop-button">Shop Now <i
-                                            class="fa fa-arrow-right"></i></a>
+
                                 </div>
                             </div>
                         </div>

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Seller;
 use App\Models\VerificationToken;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+
 use constGuards;
 use constDefaults;
 
@@ -296,4 +298,50 @@ class SellerController extends Controller
         return redirect()->route('seller.login')->with('success','Done!, Your password has been changed. Use new password to login into system.');
 
       } //End Method
+
+      public function profileView(Request $request){
+        $data = [
+            'pageTitle'=>'Profile'
+        ];
+        return view('back.page.seller.profile',$data);
+    }// End Method
+
+    public function changeProfilePicture(Request $request)
+    {
+        // Fetch the authenticated seller
+        $seller = Seller::findOrFail(auth('seller')->id());
+
+        // Define the path where seller profile pictures are stored
+        $path = 'images/users/sellers/';
+
+        // Get the uploaded file
+        $file = $request->file('sellerProfilePictureFile');
+
+        // Get the seller's current profile picture
+        $old_picture = $seller->getAttributes()['picture'];
+        $file_path = $path.$old_picture;
+
+        // Generate a new filename for the uploaded image
+        $filename = 'SELLER_IMG_'.rand(2,1000).$seller->id.time().uniqid().'.jpg';
+
+        // Move the uploaded file to the designated directory
+        $upload = $file->move(public_path($path), $filename);
+
+        // If upload is successful
+        if ($upload) {
+            // Delete the old profile picture if it exists
+            if ($old_picture != null && File::exists(public_path($path.$old_picture))) {
+                File::delete(public_path($path.$old_picture));
+            }
+
+            // Update the seller's profile picture in the database
+            $seller->update(['picture' => $filename]);
+
+            // Return a success response
+            return response()->json(['status' => 1, 'msg' => 'Your profile picture has been successfully updated.']);
+        } else {
+            // Return an error response
+            return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
+        }
+    }
 }
