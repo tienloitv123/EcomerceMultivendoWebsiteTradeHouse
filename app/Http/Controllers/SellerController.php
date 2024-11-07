@@ -11,6 +11,8 @@ use App\Models\Seller;
 use App\Models\VerificationToken;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Models\Shop;
+
 
 use constGuards;
 use constDefaults;
@@ -342,6 +344,78 @@ class SellerController extends Controller
         } else {
             // Return an error response
             return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
+        }
+    }
+
+    public function shopSettings(Request $request){
+        $seller = Seller::findOrFail(auth('seller')->id());
+        $shop = Shop::where('seller_id',$seller->id)->first();
+        $shopInfo = '';
+
+        if( !$shop ){
+            //Create shop for this seller when not exists
+            Shop::create(['seller_id'=>$seller->id]);
+            $nshop = Shop::where('seller_id',$seller->id)->first();
+            $shopInfo = $nshop;
+        }else{
+            $shopInfo = $shop;
+        }
+
+        $data = [
+            'pageTitle'=>'Shop Settings',
+            'shopInfo'=>$shopInfo
+        ];
+
+        return view('back.page.seller.shop-settings',$data);
+    }
+
+    public function shopSetup(Request $request){
+        $seller = Seller::findOrFail(auth('seller')->id());
+        $shop = Shop::where('seller_id',$seller->id)->first();
+        $old_logo_name = $shop->shop_logo;
+        $logo_name = '';
+        $path = 'images/shop/';
+
+        //Validate the form
+        $request->validate([
+            'shop_name'=>'required|unique:shops,shop_name,'.$shop->id,
+            'shop_phone'=>'required|numeric',
+            'shop_address'=>'required',
+            'shop_description'=>'required',
+            'shop_logo'=>'nullable|mimes:jpeg,png,jpg'
+        ]);
+
+        if( $request->hasFile('shop_logo') ){
+            $file = $request->file('shop_logo');
+            $filename = 'SHOPLOGO_'.$seller->id.uniqid().'.'.$file->getClientOriginalExtension();
+
+            $upload = $file->move(public_path($path),$filename);
+
+            if( $upload ){
+                $logo_name = $filename;
+
+                //Delete an existing shop logo
+                if( $old_logo_name != null && File::exists(public_path($path.$old_logo_name)) ){
+                    File::delete(public_path($path.$old_logo_name));
+                }
+            }
+        }
+
+        //Update Seller Shop Details
+        $data = array(
+            'shop_name'=>$request->shop_name,
+            'shop_phone'=>$request->shop_phone,
+            'shop_address'=>$request->shop_address,
+            'shop_description'=>$request->shop_description,
+            'shop_logo'=>$logo_name != null ? $logo_name : $old_logo_name
+        );
+
+        $update = $shop->update($data);
+
+        if( $update ){
+            return redirect()->route('seller.shop-settings')->with('success','Your shop info have been updated.');
+        }else{
+            return redirect()->route('seller.shop-settings')->with('fail','Error on updating your shop info.');
         }
     }
 }

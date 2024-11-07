@@ -44,6 +44,11 @@
     <!-- End Google Tag Manager -->
     <link rel="stylesheet" href="/extra-assets/ijabo/ijabo.min.css">
     <link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="/extra-assets/summernote/summernote-bs4.min.css">
+
     <style>
 		.swal2-popup{
 			font-size: 0.78em;
@@ -360,6 +365,15 @@
                                 <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
                             </a>
                         </li>
+                        <li class="dropdown">
+							<a href="javascript:;" class="dropdown-toggle {{ Route::is('seller.product.*') ? 'active' : '' }}">
+								<span class="micon bi bi-bag"></span><span class="mtext">Manage Products</span>
+							</a>
+							<ul class="submenu">
+								<li><a href="{{ route('seller.product.all-products') }}" class="{{ Route::is('seller.product.all-products') ? 'active' : '' }}">All Products</a></li>
+								<li><a href="{{ route('seller.product.add-product') }}" class="{{ Route::is('seller.product.add-product') ? 'active' : '' }}">Add Product</a></li>
+							</ul>
+						</li>
                         <li>
                             <div class="dropdown-divider"></div>
                         </li>
@@ -376,6 +390,14 @@
                             </a>
 
                         </li>
+                        <li>
+							<a href="{{ route('seller.shop-settings') }}" class="dropdown-toggle no-arrow {{ Route::is('seller.shop-settings') ? 'active' : '' }}">
+								<span class="micon bi bi-shop"></span>
+								<span class="mtext"
+									>Shop Settigs
+									</span>
+							</a>
+						</li>
                     @endif
 
                 </ul>
@@ -452,6 +474,14 @@
     <script src="/extra-assets/ijabo/jquery.ijaboViewer.min.js"></script>
     <script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
     <script src="/extra-assets/jquery-ui-1.13.2/jquery-ui.min.js"></script>
+	<script src="/extra-assets/summernote/summernote-bs4.min.js"></script>
+		<script>
+			$(document).ready(function(){
+                $('.summernote').summernote({
+					height:200
+				});
+			});
+		</script>
 
     <script>
         window.addEventListener('showToastr', function(event) {
