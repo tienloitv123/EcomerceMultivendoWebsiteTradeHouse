@@ -22,7 +22,7 @@
                                 <ins>${{ $item->price }}</ins>
                             </div>
                             <div class="btn-group">
-                                <a href="#" class="btn btn-outline-primary btn-sm">Edit</a>
+                                <a href="{{ route('seller.product.edit-product',['id'=>$item->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>
                                 <a href="javascript:;" data-id="{{ $item->id }}" id="deleteProductBtn" class="btn btn-outline-danger btn-sm">Delete</a>
                             </div>
                         </div>

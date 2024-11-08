@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\frontEndController;
+use App\Http\Controllers\Seller\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +17,7 @@ use App\Http\Controllers\frontEndController;
 Route::get('/', function () {
     return view('front.page.home');
 });
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
 
 Route::view('/example-page','example-pages');
 Route::view('/example-auth','example-auth');
