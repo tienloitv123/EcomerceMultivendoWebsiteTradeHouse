@@ -135,11 +135,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($request->product_id);
         $product_image = $product->product_image;
 
-        /**
-         * VALIDATE THE FORM
-         * -----------------
-         */
-
          $request->validate([
             'name'=>'required|unique:products,name,'.$product->id,
             'summary'=>'required|min:100',
@@ -219,5 +214,24 @@ class ProductController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
         }
     }
+//     public function show($id)
+// {
+//     $product = Product::findOrFail($id);
+
+//     return view('front.page.product-detail', compact('product'));
+// }
+
+public function show($id)
+{
+    $product = Product::findOrFail($id);
+
+    // Lấy các sản phẩm khác cùng seller (loại trừ sản phẩm hiện tại)
+    $relatedProducts = Product::where('seller_id', $product->seller_id)
+                              ->where('id', '!=', $id)
+                              ->take(6) // giới hạn số lượng sản phẩm hiển thị
+                              ->get();
+
+    return view('front.page.product-detail', compact('product', 'relatedProducts'));
+}
 
 }

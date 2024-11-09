@@ -19,6 +19,18 @@
     <link type="text/css" rel="stylesheet" href="/front/styles/icon-font.min.css" />
     <link type="text/css" rel="stylesheet" href="/front/css/vendors/animate.css">
     <link type="text/css" rel="stylesheet" href="/front/css/custom.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.theme.min.css">
+<!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/back/vendors/styles/core.css" />
+    <link rel="stylesheet" type="text/css" href="/back/vendors/styles/icon-font.min.css" />
+    <link rel="stylesheet" type="text/css" href="/back/vendors/styles/style.css" />
+    <link rel="stylesheet" href="/extra-assets/summernote/summernote-bs4.min.css">
+
+
     {{-- <meta charset="utf-8">
     <title>@yield('pageTitle')</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -55,7 +67,7 @@
     <!-- Footer End -->
 
 
-   
+
 
     <!-- Tap to top start -->
     <div class="theme-option">
@@ -90,6 +102,14 @@
     <script src="/front/js/custom-wow.js"></script>
     <script src="/front/js/script.js"></script>
     <script src="/front/js/settings.js"></script>
+    <script src="/extra-assets/summernote/summernote-bs4.min.js"></script>
+		<script>
+			$(document).ready(function(){
+                $('.summernote').summernote({
+					height:200
+				});
+			});
+		</script>
     @livewireScripts()
     @stack('scripts')
 </body>

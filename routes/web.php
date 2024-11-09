@@ -14,11 +14,13 @@ use App\Http\Controllers\Seller\ProductController;
 |
 */
 
-Route::get('/', function () {
-    return view('front.page.home');
-});
+// Route::get('/', function () {
+//     return view('front.page.home');
+// });
+Route::get('/', [FrontEndController::class, 'homePage'])->name('home');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
-
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
+Route::get('/products', [FrontEndController::class, 'productList'])->name('products.list');
 Route::view('/example-page','example-pages');
 Route::view('/example-auth','example-auth');
 Route::view ('/example-frontend','example-frontend');

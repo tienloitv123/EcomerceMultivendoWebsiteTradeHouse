@@ -216,67 +216,105 @@
                     </div>
                 </div>
 
-                <div class="section-b-space">
-                    <div class="product-border border-row overflow-hidden">
-                        <div class="product-box-slider no-arrow">
-                            <div>
-                                <div class="row m-0">
-                                    <div class="col-12 px-0">
-                                        <div class="product-box">
-                                            <div class="product-image">
-                                                <a href="product-detail.html">
-                                                    <img src="/front/images/product img place holder 1.png"
-                                                        class="img-fluid   lazyload" alt>
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li title="View">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view">
-                                                            <i class="ijaboIcon sx-1 dw dw-eye"></i>
-                                                        </a>
-                                                    </li>
+                    {{-- <div class="section-b-space">
+                        <div class="product-border border-row overflow-hidden">
+                            <div class="product-box-slider no-arrow">
+                                <div>
+                                    <div class="row m-0">
+                                        <div class="col-12 px-0">
+                                            <div class="product-box">
+                                                <div class="product-image">
+                                                    <a href="product-detail.html">
+                                                        <img src="/front/images/product img place holder 1.png"
+                                                            class="img-fluid   lazyload" alt>
+                                                    </a>
+                                                    <ul class="product-option">
+                                                        <li title="View">
+                                                            <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                data-bs-target="#view">
+                                                                <i class="ijaboIcon sx-1 dw dw-eye"></i>
+                                                            </a>
+                                                        </li>
 
-                                                    <li title="Compare">
-                                                        <a href="compare.html">
-                                                            <i class="icon-copy dw dw-exchange"></i>
-                                                        </a>
-                                                    </li>
+                                                        <li title="Compare">
+                                                            <a href="compare.html">
+                                                                <i class="icon-copy dw dw-exchange"></i>
+                                                            </a>
+                                                        </li>
 
-                                                    <li title="Wishlist">
-                                                        <a href="wishlist.html" class="notifi-wishlist">
-                                                            <i class="ijaboIcon sx-1 dw dw-heart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="product-detail">
-                                                <a href="product-detail.html">
-                                                    <h6 class="name">
-                                                        Gravida massa
-                                                        volutpat aenean
-                                                        odio erat nullam
-                                                        fringilla</h6>
-                                                </a>
+                                                        <li title="Wishlist">
+                                                            <a href="wishlist.html" class="notifi-wishlist">
+                                                                <i class="ijaboIcon sx-1 dw dw-heart"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product-detail">
+                                                    <a href="product-detail.html">
+                                                        <h6 class="name">
+                                                            Gravida massa
+                                                            volutpat aenean
+                                                            odio erat nullam
+                                                            fringilla</h6>
+                                                    </a>
 
-                                                <h5 class="sold text-content">
-                                                    <span class="theme-color price">$30.69</span>
-                                                    <del>38.56</del>
-                                                </h5>
-                                                <div class="add-to-cart-box mt-2">
-                                                    <a href="cart.html"
-                                                        class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
-                                                            class="icon-copy bi bi-cart-plus-fill"></i>
-                                                        Add
-                                                        To Cart</a>
+                                                    <h5 class="sold text-content">
+                                                        <span class="theme-color price">$30.69</span>
+                                                        <del>38.56</del>
+                                                    </h5>
+                                                    <div class="add-to-cart-box mt-2">
+                                                        <a href="cart.html"
+                                                            class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
+                                                                class="icon-copy bi bi-cart-plus-fill"></i>
+                                                            Add
+                                                            To Cart</a>
+                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div> --}}
+                    <div class="section-b-space">
+                        <div class="product-border border-row overflow-hidden">
+                            <div class="row m-0">
+                                @isset($featuredProducts)
+                                    @foreach ($featuredProducts as $product)
+                                        <li class="col-lg-4 col-md-6 col-sm-12">
+                                            <div class="product-box">
+                                                <div class="producct-img">
+                                                    <a href="{{ route('product.detail', ['id' => $product->id]) }}">
+                                                        <img src="/images/products/{{ $product->product_image }}" class="img-fluid lazyload" alt="{{ $product->name }}">
+                                                    </a>
+                                                </div>
+                                                <div class="product-caption">
+                                                    <h4><a href="{{ route('product.detail', ['id' => $product->id]) }}">{{ $product->name }}</a></h4>
+                                                    <div class="price">
+                                                        @if ($product->compare_price)
+                                                            <del>${{ $product->compare_price }}</del>
+                                                        @endif
+                                                        <ins>${{ $product->price }}</ins>
+                                                    </div>
+                                                    <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="btn btn-outline-primary">View</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    <p>There is none of Product. Sorry for this trail</p>
+                                @endisset
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+
+
+
+                  {{-- @livewire('seller.products-list') --}}
+
 
                 <div class="title">
                     <h2>Shop by Categories</h2>
