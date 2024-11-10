@@ -15,15 +15,15 @@
                         </a>
 
                         <div class="middle-box">
-
                             <div class="search-box">
-                                <div class="input-group">
-                                    <input type="search" class="form-control"
-                                        placeholder="What are you looking for?" aria-describedby="button-addon2">
-                                    <button class="btn" type="button" id="button-addon2">
-                                        <i class="icon-copy dw dw-search2"></i>
-                                    </button>
-                                </div>
+                                <form action="{{ route('product.search') }}" method="GET">
+                                    <div class="input-group">
+                                        <input type="search" name="query" class="form-control" placeholder="What are you looking for?" aria-describedby="button-addon2" required>
+                                        <button class="btn" type="submit" id="button-addon2">
+                                            <i class="icon-copy dw dw-search2"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
 
@@ -122,8 +122,8 @@
                                         </div>
                                         <div class="delivery-detail">
                                             @if(auth('client')->check())
-                                                <h6>Hello, {{ auth('client')->user()->name }}</h6>
-                                                <h5>My Account</h5>
+                                                <h6>Hello</h6>
+                                                <h5> {{ auth('client')->user()->name }}</h5>
                                             @else
                                                 <h6>Hello,</h6>
                                                 <h5>My Account</h5>
@@ -256,33 +256,36 @@
         </div>
     </div>
 
+    <style>
+        .header-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
 
+        .header-nav-left {
+            display: flex;
+            align-items: center;
+        }
 
-    <Style>
-    .header-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-}
+        .header-nav-middle .nav-link {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-.header-nav-left {
-    display: flex;
-    align-items: center;
-}
+        .header-nav-middle .nav-link:hover {
+            color: #007bff;
+            text-decoration: underline;
+        }
 
-.header-nav-middle .nav-link {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.header-nav-middle .nav-link:hover {
-    color: #007bff;
-    text-decoration: underline;
-}
-
-    </Style>
+        /* Background color for header */
+        header {
+            background-color: #f1f1f1; /* light gray background */
+            border-bottom: 2px solid #000; /* black border at bottom */
+        }
+    </style>
 </header>

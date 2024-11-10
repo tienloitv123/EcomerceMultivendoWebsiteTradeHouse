@@ -39,7 +39,7 @@
 
     <!-- Phần sản phẩm liên quan -->
     <div class="related-products section-b-space">
-        <h4 class="mb-4">Related Products</h4>
+        <h4 class="mb-4">Other Products</h4>
         <div class="product-list">
             <ul class="row">
                 @forelse ($relatedProducts as $relatedProduct)

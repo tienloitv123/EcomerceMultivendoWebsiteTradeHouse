@@ -50,7 +50,7 @@ class ProductController extends Controller
         $request->validate([
             'name'=>'required|unique:products,name',
             'summary'=>'required|min:100',
-            'product_image'=>'required|mimes:png,jpg,jpeg|max:1024',
+            'product_image'=>'required|mimes:png,jpg,jpeg,jfif|max:1024',
             'category'=>'required|exists:categories,id',
             'subcategory'=>'required|exists:sub_categories,id',
             'price'=>['required',new ValidatePrice],
@@ -221,17 +221,84 @@ class ProductController extends Controller
 //     return view('front.page.product-detail', compact('product'));
 // }
 
-public function show($id)
+    public function show($slug)
+    {
+        // Find the product by slug
+        $product = Product::where('slug', $slug)->firstOrFail();
+
+        // Retrieve related products from the same seller (excluding the current product)
+        $relatedProducts = Product::where('seller_id', $product->seller_id)
+                                ->where('id', '!=', $product->id)
+                                ->take(6) // Limit the number of related products displayed
+                                ->get();
+
+        return view('front.page.product-detail', compact('product', 'relatedProducts'));
+    }
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('query'); // Get the search term from the query parameter
+
+        $products = Product::where('name', 'LIKE', '%' . $searchTerm . '%')
+                    ->where('visibility', 1) // Assuming visibility = 1 means the product is visible
+                    ->paginate(10); // You can set the pagination limit as needed
+
+        return view('front.page.search_results', compact('products', 'searchTerm'));
+    }
+
+        public function children()
+    {
+        return $this->hasMany(SubCategory::class, 'is_child_of', 'id');
+    }
+    public function filter(Request $request)
+    {
+        $query = Product::query();
+
+        // Apply search term filter first
+        if ($request->filled('query')) {
+            $searchTerm = $request->input('query');
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        // Apply category filter
+        if ($request->filled('category')) {
+            $query->where('category', $request->input('category'));
+        }
+
+        // Apply combined subcategory filter
+        if ($request->filled('subcategory')) {
+            $query->where('subcategory', $request->input('subcategory'));
+        }
+
+        // Apply price sorting
+        if (in_array($request->input('price'), ['asc', 'desc'])) {
+            $query->orderBy('price', $request->input('price'));
+        }
+
+        // Paginate the filtered results
+        $products = $query->paginate(10);
+
+        // Retrieve all categories with subcategories for the filter dropdowns
+        $categories = Category::with('subcategories.children')->get();
+
+        return view('front.page.search_results', [
+            'products' => $products,
+            'searchTerm' => $request->input('query'),
+            'categories' => $categories,
+        ]);
+    }
+
+    public function searchByCategory($id)
 {
-    $product = Product::findOrFail($id);
+    $category = Category::findOrFail($id);
 
-    // Lấy các sản phẩm khác cùng seller (loại trừ sản phẩm hiện tại)
-    $relatedProducts = Product::where('seller_id', $product->seller_id)
-                              ->where('id', '!=', $id)
-                              ->take(6) // giới hạn số lượng sản phẩm hiển thị
-                              ->get();
+    // Fetch products by category and include visibility check
+    $products = Product::where('category', $id)
+        ->where('visibility', 1)
+        ->paginate(10);
 
-    return view('front.page.product-detail', compact('product', 'relatedProducts'));
+    return view('front.page.category_search_results', compact('products', 'category'));
 }
+
+
 
 }

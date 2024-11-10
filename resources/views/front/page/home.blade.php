@@ -75,16 +75,14 @@
         <div class="row g-sm-4 g-3">
             <div class="col-xxl-3 col-xl-4 d-none d-xl-block">
                 <div class="p-sticky">
-                    <div class="category-menu">
+                    {{-- <div class="category-menu">
                         <h3>Category</h3>
                         @if ( count(get_categories()) > 0 )
                         <ul>
                             @foreach (get_categories() as $category)
-
-
                             <li>
                                 <div class="category-list">
-                                    <img src="/images/categories/{{ $category->category_image }}" class="lazyload" alt>
+                                    <img src="/images/categories/{{ $category->category_image }}" class="" alt>
                                     <h5>
                                         <a href="javascript:void(0)">{{ $category->category_name }}</a>
                                     </h5>
@@ -92,9 +90,24 @@
                             </li>
                             @endforeach
                         </ul>
-
                         @endif
+                    </div> --}}
+                    <div class="category-menu">
+                        <h3>Category</h3>
+                        @if (count(get_categories()) > 0)
+                            <ul>
+                                @foreach (get_categories() as $category)
+                                    <li>
+                                        <div class="category-list">
 
+                                                <img href="{{ route('category.search', $category->id) }}" src="/images/categories/{{ $category->category_image }}" class="lazyload" alt="{{ $category->category_name }}">
+                                                <a href="{{ route('category.search', $category->id) }} javascript:void(0)">{{ $category->category_name }}</a>
+
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
 
                     <div class="section-t-space">
@@ -309,13 +322,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-                  {{-- @livewire('seller.products-list') --}}
-
-
                 <div class="title">
                     <h2>Shop by Categories</h2>
                     <p>Condimentum magna sociis lacinia quisque porta
