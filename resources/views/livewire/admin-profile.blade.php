@@ -52,8 +52,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- Timeline Tab End -->
-                <!-- Tasks Tab start -->
                     <div class="tab-pane fade {{ $tab == 'update_password' ? 'active show' : '' }}" id="update_password" role="tabpanel">
                         <div class="pd-20 profile-task-wrap">
                             <form wire:submit='updatePassword()'>

@@ -35,9 +35,6 @@
                 {{ $admin->email }}
             </p>
         </div>
-
-
-
     </div>
     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
         <div class="card-box height-100-p overflow-hidden">

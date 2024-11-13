@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
 use App\Models\Product;
 use App\Models\VerificationToken;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
-
 class ClientController extends Controller
 {
     public function login(Request $request){
@@ -141,4 +141,70 @@ class ClientController extends Controller
         return redirect()->route('home')->with('fail', 'You are logged out!');
 
     }
+
+    public function profileView()
+    {
+        $client = Client::findOrFail(Auth::id());
+        return view('back.page.client.profile', compact('client'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|min:5',
+            'address' => 'nullable|min:5',
+            'phone' => 'nullable|min:5',
+            'email' => 'required|email|unique:clients,email,' . Auth::id(),
+        ]);
+
+        $client = Client::findOrFail(Auth::id());
+        $client->update([
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('client.profile')->with('message', 'Profile updated successfully.');
+    }
+
+    public function changeProfilePicture(Request $request)
+    {
+        // Lấy thông tin client đã đăng nhập
+        $client = Client::findOrFail(auth('client')->id());
+
+        // Đường dẫn lưu trữ ảnh hồ sơ của client
+        $path = 'images/users/clients/';
+
+        // File được tải lên từ form
+        $file = $request->file('clientProfilePictureFile');
+
+        // Lấy ảnh cũ của client
+        $old_picture = $client->getAttributes()['picture'];
+        $file_path = $path . $old_picture;
+
+        // Tạo tên file duy nhất cho ảnh mới
+        $filename = 'CLIENT_IMG_' . rand(2, 1000) . $client->id . time() . uniqid() . '.jpg';
+
+        // Di chuyển file đã tải lên vào thư mục lưu trữ
+        $upload = $file->move(public_path($path), $filename);
+
+        if ($upload) {
+            // Xóa ảnh cũ nếu tồn tại
+            if ($old_picture != null && File::exists(public_path($file_path))) {
+                File::delete(public_path($file_path));
+            }
+
+            // Cập nhật ảnh mới trong cơ sở dữ liệu
+            $client->update(['picture' => $filename]);
+
+            // Trả về phản hồi JSON để xác nhận thành công
+            return response()->json(['status' => 1, 'msg' => 'Your profile picture has been successfully updated.']);
+        } else {
+            // Trả về lỗi nếu quá trình tải lên thất bại
+            return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
+        }
+    }
+
+
 }

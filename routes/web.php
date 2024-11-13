@@ -31,15 +31,8 @@ Route::get('/filter', [ProductController::class, 'filter'])->name('product.filte
 
 Route::get('/search', [ProductController::class, 'search'])->name('product.search');
 
-// Route::get('/api/subcategories', function (Request $request) {
-//     $categoryId = $request->query('category_id');
-//     return SubCategory::where('category_id', $categoryId)->where('is_child_of', 0)->get();
-// });
+Route::get('/about-us', [FrontEndController::class, 'getGeneralSettings'])->name('about-us');
 
-// Route::get('/api/child_subcategories', function (Request $request) {
-//     $subcategoryId = $request->query('subcategory_id');
-//     return SubCategory::where('is_child_of', $subcategoryId)->get();
-// });
 Route::get('/category/{id}', [ProductController::class, 'searchByCategory'])->name('category.search');
 Route::get('/api/subcategories', function (Request $request) {
     $categoryId = $request->query('category_id');
@@ -48,4 +41,7 @@ Route::get('/api/subcategories', function (Request $request) {
                       ->with('children') // Include child subcategories
                       ->get();
 });
+Route::get('/contact-us', [FrontEndController::class, 'getContactDetails'])->name('contact-us');
+
+// Route::get('/general-settings', [FrontEndController::class, 'getGeneralSettings'])->name('general-settings');
 

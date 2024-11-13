@@ -168,7 +168,7 @@ class SellerController extends Controller
          'pageTitle' => 'Forgot Password'
         ];
         return view('back.page.seller.auth.forgot',$data);
-     } //End Method
+     } 
 
      public function sendPasswordResetLink(Request $request){
          //Validate the form

@@ -13,7 +13,6 @@
                         <a href="/" class="web-logo nav-logo">
                             <img src="/images/site/{{ get_settings()->site_logo }}" class="img-fluid blur-up lazyload" alt>
                         </a>
-
                         <div class="middle-box">
                             <div class="search-box">
                                 <form action="{{ route('product.search') }}" method="GET">
@@ -235,19 +234,11 @@
                                 <a class="nav-link" href="/">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="shop.html">Shop</a>
+                                {{-- <a class="nav-link" href="{{ route('about-us') }}">About Us</a> --}}
+                                <a class="nav-link" href="{{ route('about-us') }}">About Us</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="pages.html">Pages</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="blog.html">Blog</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="about-us.html">About Us</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="contact-us.html">Contact</a>
+                                <a class="nav-link" href="{{ route('contact-us')}}">Contact</a>
                             </li>
                         </ul>
                     </div>
@@ -255,7 +246,6 @@
             </div>
         </div>
     </div>
-
     <style>
         .header-nav {
             display: flex;

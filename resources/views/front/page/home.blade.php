@@ -1,5 +1,5 @@
 @extends('front.layout.pages-layout')
-@section('pageTitle', isset($pageTitle) ? $pageTitle : 'Page title')
+@section('pageTitle', isset($pageTitle) ? $pageTitle : 'Trade House')
 @section('content')
 
 <!-- Home Section Start -->
@@ -75,23 +75,6 @@
         <div class="row g-sm-4 g-3">
             <div class="col-xxl-3 col-xl-4 d-none d-xl-block">
                 <div class="p-sticky">
-                    {{-- <div class="category-menu">
-                        <h3>Category</h3>
-                        @if ( count(get_categories()) > 0 )
-                        <ul>
-                            @foreach (get_categories() as $category)
-                            <li>
-                                <div class="category-list">
-                                    <img src="/images/categories/{{ $category->category_image }}" class="" alt>
-                                    <h5>
-                                        <a href="javascript:void(0)">{{ $category->category_name }}</a>
-                                    </h5>
-                                </div>
-                            </li>
-                            @endforeach
-                        </ul>
-                        @endif
-                    </div> --}}
                     <div class="category-menu">
                         <h3>Category</h3>
                         @if (count(get_categories()) > 0)
@@ -101,8 +84,9 @@
                                         <div class="category-list">
 
                                                 <img href="{{ route('category.search', $category->id) }}" src="/images/categories/{{ $category->category_image }}" class="lazyload" alt="{{ $category->category_name }}">
+                                               <h5>
                                                 <a href="{{ route('category.search', $category->id) }} javascript:void(0)">{{ $category->category_name }}</a>
-
+                                                </h5>
                                         </div>
                                     </li>
                                 @endforeach

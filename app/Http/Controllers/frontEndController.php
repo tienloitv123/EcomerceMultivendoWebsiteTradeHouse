@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-
+use App\Models\GeneralSetting;
 
 class frontEndController extends Controller
 {
@@ -25,5 +25,19 @@ class frontEndController extends Controller
         $products = Product::where('visibility', 1)->paginate(10); // Lấy sản phẩm có `visibility = 1`
 
         return view('front.page.product-list', compact('products'));
+    }
+
+    public function getGeneralSettings()
+    {
+        $settings = GeneralSetting::first();
+
+        return view('front.page.about-us', compact('settings'));
+
+    }
+    public function getContactDetails()
+    {
+        $settings = GeneralSetting::first(); // Truy xuất bản ghi đầu tiên từ GeneralSetting
+
+        return view('front.page.contact-us', compact('settings')); // Truyền dữ liệu vào view contact-us
     }
 }
