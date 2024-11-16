@@ -111,23 +111,6 @@
     </div>
 </form>
 <hr>
-<div class="row">
-    <div class="col-12">
-        <div class="card-box min-height-200px pd-20 mb-20">
-            <div class="title mb-2">
-                <h6>Additional Product Images</h6>
-            </div>
-            <form action="#" class="dropzone">
-             @csrf
-            </form>
-            <button class="btn btn-outline-primary btn-sm mt-2" id="uploadAdditionalImagesBtn">Upload</button>
-        </div>
-    </div>
-    <div class="box-container mb-2" id="product_images">
-
-    </div>
-</div>
-
 @endsection
 @push('stylesheets')
     <link rel="stylesheet" href="/extra-assets/dropzonejs/min/dropzone.min.css">

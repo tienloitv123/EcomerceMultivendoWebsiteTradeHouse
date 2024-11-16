@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
 use App\Models\Product;
+use App\Models\Cart;
+use App\Models\Shop;
+use App\Models\CartDetail;
+
 use App\Models\VerificationToken;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
@@ -170,41 +174,160 @@ class ClientController extends Controller
 
     public function changeProfilePicture(Request $request)
     {
-        // Lấy thông tin client đã đăng nhập
         $client = Client::findOrFail(auth('client')->id());
-
-        // Đường dẫn lưu trữ ảnh hồ sơ của client
         $path = 'images/users/clients/';
-
-        // File được tải lên từ form
         $file = $request->file('clientProfilePictureFile');
-
-        // Lấy ảnh cũ của client
         $old_picture = $client->getAttributes()['picture'];
         $file_path = $path . $old_picture;
-
-        // Tạo tên file duy nhất cho ảnh mới
         $filename = 'CLIENT_IMG_' . rand(2, 1000) . $client->id . time() . uniqid() . '.jpg';
-
-        // Di chuyển file đã tải lên vào thư mục lưu trữ
         $upload = $file->move(public_path($path), $filename);
-
         if ($upload) {
-            // Xóa ảnh cũ nếu tồn tại
             if ($old_picture != null && File::exists(public_path($file_path))) {
                 File::delete(public_path($file_path));
             }
-
-            // Cập nhật ảnh mới trong cơ sở dữ liệu
             $client->update(['picture' => $filename]);
-
-            // Trả về phản hồi JSON để xác nhận thành công
             return response()->json(['status' => 1, 'msg' => 'Your profile picture has been successfully updated.']);
         } else {
-            // Trả về lỗi nếu quá trình tải lên thất bại
             return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
         }
     }
 
+    public function showCart()
+    {
+        $cart = Cart::where('client_id', auth('client')->id())->first();
+
+        if (!$cart || $cart->cartDetails()->count() == 0) {
+            return view('back.page.client.cart')->with('message', 'Your cart is empty.');
+        }
+
+        $cartDetails = $cart->cartDetails()
+            ->with(['product' => function ($query) {
+                $query->select('id', 'name', 'price', 'compare_price', 'product_image', 'seller_id');
+            }])
+            ->get()
+            ->groupBy('product.seller_id');
+
+        $cartShops = [];
+
+        foreach ($cartDetails as $sellerId => $details) {
+            $shop = Shop::where('seller_id', $sellerId)->first();
+
+            $shopTotal = 0;
+
+            foreach ($details as $detail) {
+                $shopTotal += $detail->product->price * $detail->quantity;
+            }
+
+            $cartShops[] = [
+                'shop_id' => $sellerId,  // Thêm shop_id ở đây
+                'shop_name' => $shop->shop_name ?? 'Unknown Shop',
+                'items' => $details,
+                'total' => $shopTotal,
+            ];
+        }
+
+        return view('back.page.client.cart', compact('cartShops'));
+    }
+
+
+    public function updateCartQuantity(Request $request)
+{
+    $request->validate([
+        'cart_detail_id' => 'required|integer|exists:cart_details,id',
+        'quantity' => 'required|integer|min:1',
+    ]);
+
+    // Tìm cartDetail và cập nhật số lượng
+    $cartDetail = CartDetail::find($request->cart_detail_id);
+    $cartDetail->quantity = $request->quantity;
+    $cartDetail->save();
+
+    // Tính tổng giá trị của sản phẩm
+    $totalPrice = $cartDetail->quantity * $cartDetail->price;
+
+    // Tính tổng giá của shop sau khi cập nhật số lượng cho tất cả các sản phẩm có cùng seller_id trong cart
+    $shopTotal = $cartDetail->cart->cartDetails()
+                     ->where('seller_id', $cartDetail->seller_id)
+                     ->sum(DB::raw('quantity * price'));
+
+    return response()->json([
+        'success' => true,
+        'totalPrice' => number_format($totalPrice, 2),
+        'shopTotal' => number_format($shopTotal, 2),
+        'shop_id' => $cartDetail->seller_id,
+        'message' => 'Quantity updated successfully!',
+    ]);
+}
+
+
+
+
+public function addToCart(Request $request)
+{
+    if (!auth('client')->check()) {
+        return redirect()->route('client.login')->with('fail', 'You need to log in to add products to the cart.');
+    }
+    $request->validate([
+        'product_id' => 'required|integer|exists:products,id',
+        'quantity' => 'required|integer|min:1',
+    ]);
+    $product_id = $request->product_id;
+    $quantity = $request->quantity;
+    $product = Product::findOrFail($product_id);
+    $cart = Cart::firstOrCreate(
+        ['client_id' => auth('client')->id()],
+        ['created_at' => now()]
+    );
+    $cartDetail = $cart->cartDetails()->updateOrCreate(
+        ['cart_id' => $cart->id, 'product_id' => $product_id],
+        [
+            'quantity' => DB::raw("quantity + $quantity"),
+            'price' => $product->price,
+            'seller_id' => $product->seller_id,
+        ]
+    );
+    return redirect()->back()->with('success', 'Product added to cart successfully!');
+
+}
+
+// public function updateCartQuantity(Request $request)
+// {
+//     $request->validate([
+//         'cart_detail_id' => 'required|integer|exists:cart_details,id',
+//         'quantity' => 'required|integer|min:1',
+//     ]);
+
+//     $cartDetail = CartDetail::find($request->cart_detail_id);
+//     $cartDetail->quantity = $request->quantity;
+//     $cartDetail->save();
+
+//     $shopTotal = $cartDetail->cart->cartDetails()
+//                      ->where('seller_id', $cartDetail->seller_id)
+//                      ->sum(DB::raw('quantity * price'));
+
+//     return response()->json([
+//         'success' => true,
+//         'totalPrice' => number_format($cartDetail->quantity * $cartDetail->price, 2),
+//         'shopTotal' => number_format($shopTotal, 2),
+//         'shop_id' => $cartDetail->seller_id,
+//         'message' => 'Quantity updated successfully!',
+//     ]);
+// }
+
+
+public function removeItem(Request $request)
+{
+    $request->validate([
+        'cart_detail_id' => 'required|integer|exists:cart_details,id',
+    ]);
+
+    $cartDetail = CartDetail::find($request->cart_detail_id);
+    $cartDetail->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Item removed from cart.'
+    ]);
+}
 
 }

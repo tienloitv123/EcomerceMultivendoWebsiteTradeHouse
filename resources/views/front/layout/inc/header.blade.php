@@ -62,56 +62,11 @@
                                 <li class="right-side">
                                     <div class="onhover-dropdown header-badge">
                                         <button type="button" class="btn p-0 position-relative header-wishlist">
-                                            <i class="ijaboIcon icon-copy dw dw-shopping-cart2"></i>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge">2
+                                           <a href="{{ route('client.cart') }}"><i class="ijaboIcon icon-copy dw dw-shopping-cart2"></i></a>
+                                            <span class="position-absolute top-0 start-100 translate-middle badge">?
                                                 <span class="visually-hidden">unread messages</span>
                                             </span>
                                         </button>
-
-                                        <div class="onhover-div">
-                                            <ul class="cart-list">
-                                                <li class="product-box-contain">
-                                                    <div class="drop-cart">
-                                                        <a href="product-detail.html" class="drop-image">
-                                                            <img src="/front/images/product img place holder 1.png" alt>
-                                                        </a>
-                                                        <div class="drop-contain">
-                                                            <a href="product-detail.html">
-                                                                <h5>Product name here</h5>
-                                                            </a>
-                                                            <h6><span>3 x</span> $12.01</h6>
-                                                            <button class="close-button close_button">
-                                                                <i class="fa fa-xmark"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="product-box-contain">
-                                                    <div class="drop-cart">
-                                                        <a href="product-detail.html" class="drop-image">
-                                                            <img src="/front/images/product img place holder 1.png" alt>
-                                                        </a>
-                                                        <div class="drop-contain">
-                                                            <a href="product-detail.html">
-                                                                <h5>Product name 2GB</h5>
-                                                            </a>
-                                                            <h6><span>1 x</span> $14.12</h6>
-                                                            <button class="close-button close_button">
-                                                                <i class="fa fa-xmark"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <div class="price-box">
-                                                <h5>Total :</h5>
-                                                <h4 class="theme-color fw-bold">$26.13</h4>
-                                            </div>
-                                            <div class="button-group">
-                                                <a href="cart.html" class="btn btn-sm cart-button">View Cart</a>
-                                                <a href="checkout.html" class="btn btn-sm cart-button theme-bg-color text-white">Checkout</a>
-                                            </div>
-                                        </div>
                                     </div>
                                 </li>
                                 <li class="right-side onhover-dropdown">

@@ -282,9 +282,9 @@
                                     @foreach ($featuredProducts as $product)
                                         <li class="col-lg-4 col-md-6 col-sm-12">
                                             <div class="product-box">
-                                                <div class="producct-img">
+                                                <div class="product-img">
                                                     <a href="{{ route('product.detail', ['id' => $product->id]) }}">
-                                                        <img src="/images/products/{{ $product->product_image }}" class="img-fluid lazyload" alt="{{ $product->name }}">
+                                                        <img src="/images/products/{{ $product->product_image }}" alt="{{ $product->name }}" class="img-fluid" style="max-height: 200px; object-fit: contain;">
                                                     </a>
                                                 </div>
                                                 <div class="product-caption">
@@ -306,12 +306,9 @@
                             </div>
                         </div>
                     </div>
+
                 <div class="title">
                     <h2>Shop by Categories</h2>
-                    <p>Condimentum magna sociis lacinia quisque porta
-                        eros nulla suspendisse sollicitudin eu,
-                        aliquet vehicula accumsan justo rhoncus erat
-                        venenatis varius</p>
                 </div>
 
                 @if ( count(get_categories()) > 0 )

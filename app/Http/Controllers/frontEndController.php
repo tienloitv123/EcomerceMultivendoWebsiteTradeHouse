@@ -22,22 +22,19 @@ class frontEndController extends Controller
     }
     public function productList()
     {
-        $products = Product::where('visibility', 1)->paginate(10); // Lấy sản phẩm có `visibility = 1`
-
+        $products = Product::where('visibility', 1)->paginate(10); 
         return view('front.page.product-list', compact('products'));
     }
 
     public function getGeneralSettings()
     {
         $settings = GeneralSetting::first();
-
         return view('front.page.about-us', compact('settings'));
 
     }
     public function getContactDetails()
     {
-        $settings = GeneralSetting::first(); // Truy xuất bản ghi đầu tiên từ GeneralSetting
-
-        return view('front.page.contact-us', compact('settings')); // Truyền dữ liệu vào view contact-us
+        $settings = GeneralSetting::first();
+        return view('front.page.contact-us', compact('settings'));
     }
 }

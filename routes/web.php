@@ -16,21 +16,19 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::get('/', function () {
-//     return view('front.page.home');
-// });
+
 Route::get('/', [FrontEndController::class, 'homePage'])->name('home');
+// Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
+// Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
-Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
+
 Route::get('/products', [FrontEndController::class, 'productList'])->name('products.list');
 Route::view('/example-page','example-pages');
 Route::view('/example-auth','example-auth');
 Route::view ('/example-frontend','example-frontend');
 Route::view('/homepage','front.page.home' );
 Route::get('/filter', [ProductController::class, 'filter'])->name('product.filter');
-
 Route::get('/search', [ProductController::class, 'search'])->name('product.search');
-
 Route::get('/about-us', [FrontEndController::class, 'getGeneralSettings'])->name('about-us');
 
 Route::get('/category/{id}', [ProductController::class, 'searchByCategory'])->name('category.search');

@@ -158,17 +158,6 @@ class ProductController extends Controller
             $old_product_image = $product->product_image;
 
             $upload = $file->move(public_path($path),$filename);
-            // $maxWidth = 1080;
-            // $maxHeight = 1080;
-            // $full_path = $path.$filename;
-            // $image = Image::make($file->path());
-
-            // $image->height() > $image->width() ? $maxWidth = null : $maxHeight = null;
-            // $image->fit($maxWidth, $maxHeight, function($constraint){
-            //       $constraint->upsize();
-            // });
-            // $upload = $image->save($full_path);
-
             if( $upload ){
                 //Delete old product image
                 if( File::exists(public_path($path.$old_product_image)) ){
@@ -214,26 +203,20 @@ class ProductController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
         }
     }
-//     public function show($id)
-// {
-//     $product = Product::findOrFail($id);
-
-//     return view('front.page.product-detail', compact('product'));
-// }
-
-    public function show($slug)
+    public function show($id)
     {
-        // Find the product by slug
-        $product = Product::where('slug', $slug)->firstOrFail();
+        $product = Product::findOrFail($id);
 
-        // Retrieve related products from the same seller (excluding the current product)
         $relatedProducts = Product::where('seller_id', $product->seller_id)
                                 ->where('id', '!=', $product->id)
-                                ->take(6) // Limit the number of related products displayed
+                                ->take(6)
                                 ->get();
 
         return view('front.page.product-detail', compact('product', 'relatedProducts'));
     }
+
+
+
     public function search(Request $request)
     {
         $searchTerm = $request->input('query'); // Get the search term from the query parameter
