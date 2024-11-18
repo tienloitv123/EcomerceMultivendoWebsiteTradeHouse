@@ -2,67 +2,68 @@
 @section('pageTitle', 'Your Cart')
 @section('content')
 
-<div class="pt-5" >
-    <div class="container my-5 ">
+<div class="pt-5">
+    <div class="container my-5">
         @if(session('message'))
-            <p class="text-center">{{ session('message') }}</p>
-        @else
-            @foreach ($cartShops as $shop)
-                <div class="cart-shop pt-4 mt-1 mb-1 border border-dark border-right-0 border-left-0" ">
-                    <h5 class="fw-bold mb-4"><a href=""> Shop : {{ $shop['shop_name'] }} </a></h5>
+        <p class="text-center text-danger">{{ session('message') }}</p>
+    @elseif(!empty($cartShops) && count($cartShops) > 0)
+        @foreach ($cartShops as $shop)
+            <div class="cart-shop pt-4 mt-1 mb-1 border border-dark border-right-0 border-left-0">
+                <h5 class="fw-bold mb-4"><a href=""> Shop : {{ $shop['shop_name'] }} </a></h5>
 
-                    @foreach ($shop['items'] as $item)
-                        <div class="row align-items-center border-bottom py-3" id="cart-item-{{ $item->id }}">
-                            <div class="col-2">
-                                <img src="{{ asset('images/products/' . $item->product->product_image) }}" alt="Product Image" class="img-fluid">
-                            </div>
-                            <div class="col-2">
-                                <p class="fw-bold mb-1">{{ $item->product->name }}</p>
-                            </div>
-                            <div class="col-2">
-                                <span>${{ number_format($item->product->price, 2) }}</span>
-                            </div>
-                            <div class="col-2">
-                                @if($item->product->compare_price)
-                                    <span><del>${{ number_format($item->product->compare_price, 2) }}</del></span>
-                                @else
-                                    <span>-</span>
-                                @endif
-                            </div>
-                            <div class="col-2 d-flex align-items-center quantity-control">
-                                <button class="btn btn-secondary btn-sm update-quantity px-2" data-cart-detail-id="{{ $item->id }}" data-action="decrease">-</button>
-                                <input type="number" class="form-control quantity-input mx-1 text-center" data-cart-detail-id="{{ $item->id }}" value="{{ $item->quantity }}" min="1" style="width: 60px;">
-                                <button class="btn btn-secondary btn-sm update-quantity px-2" data-cart-detail-id="{{ $item->id }}" data-action="increase">+</button>
-                            </div>
-                            <div class="col-1">
-                                <span id="total-price-{{ $item->id }}">${{ number_format($item->product->price * $item->quantity, 2) }}</span>
-                            </div>
-                            <div class="col-1">
-                                <button class="btn btn-danger btn-sm remove-item-btn" data-cart-detail-id="{{ $item->id }}">X</button>
-                            </div>
-                        </div>
-                    @endforeach
-
-                    <!-- Total for each shop -->
-                    <div class="row justify-content-end align-items-center py-3">
+                @foreach ($shop['items'] as $item)
+                    <div class="row align-items-center border-bottom py-3" id="cart-item-{{ $item->id }}">
                         <div class="col-2">
-                            <p class="fw-bold">Total Price</p>
+                            <img src="{{ asset('images/products/' . $item->product->product_image) }}" alt="Product Image" class="img-fluid">
                         </div>
                         <div class="col-2">
-                            <input type="text" class="form-control shop-total" id="shop-total-{{ $shop['shop_id'] }}" value="${{ number_format($shop['total'], 2) }}" readonly>
+                            <p class="fw-bold mb-1">{{ $item->product->name }}</p>
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-primary">Check out</button>
+                            <span>${{ number_format($item->product->price, 2) }}</span>
+                        </div>
+                        <div class="col-2">
+                            @if($item->product->compare_price)
+                                <span><del>${{ number_format($item->product->compare_price, 2) }}</del></span>
+                            @else
+                                <span>-</span>
+                            @endif
+                        </div>
+                        <div class="col-2 d-flex align-items-center quantity-control">
+                            <button class="btn btn-secondary btn-sm update-quantity px-2" data-cart-detail-id="{{ $item->id }}" data-action="decrease">-</button>
+                            <input type="number" class="form-control quantity-input mx-1 text-center" data-cart-detail-id="{{ $item->id }}" value="{{ $item->quantity }}" min="1" style="width: 60px;">
+                            <button class="btn btn-secondary btn-sm update-quantity px-2" data-cart-detail-id="{{ $item->id }}" data-action="increase">+</button>
+                        </div>
+                        <div class="col-1">
+                            <span id="total-price-{{ $item->id }}">${{ number_format($item->product->price * $item->quantity, 2) }}</span>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-danger btn-sm remove-item-btn" data-cart-detail-id="{{ $item->id }}">X</button>
                         </div>
                     </div>
+                @endforeach
 
-
+                <div class="row justify-content-between align-items-center py-3">
+                    <div class="col-6">
+                        <h5>Total: <span id="shop-total-{{ $shop['shop_id'] }}">${{ number_format($shop['total'], 2) }}</span></h5>
+                    </div>
+                    <div class="col-2 text-end">
+                        <form action="{{ route('client.order.preview') }}" method="GET">
+                            <input type="hidden" name="seller_id" value="{{ $shop['shop_id'] }}">
+                            <button type="submit" class="btn btn-primary">Checkout</button>
+                        </form>
+                    </div>
                 </div>
-            @endforeach
-        @endif
+            </div>
+        @endforeach
+    @else
+        <div class="text-center my-5">
+            <h4>Your cart is empty.</h4>
+            <p><a href="{{ route('home') }}" class="btn btn-primary">Continue Shopping</a></p>
+        </div>
+    @endif
     </div>
 </div>
-
 <style>
     .quantity-control .btn {
     width: 30px;

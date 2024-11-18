@@ -60,4 +60,8 @@ class Seller extends Authenticatable
             return asset('/images/users/default-avatar.png');
         }
     }
+    public function shop()
+    {
+        return $this->hasOne(Shop::class, 'seller_id');
+    }
 }

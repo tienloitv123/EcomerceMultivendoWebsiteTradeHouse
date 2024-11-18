@@ -28,7 +28,12 @@ Route::prefix('client')->name('client.')->group(function() {
             Route::post('/add-to-cart', 'addToCart')->name('cart.add');
             Route::post('/cart/update-quantity', 'updateCartQuantity')->name('cart.updateQuantity');
             Route::post('/cart/remove-item', 'removeItem')->name('cart.removeItem');
-    
+            Route::get('/order/preview', [ClientController::class, 'previewOrder'])->name('order.preview');
+            Route::post('/order/store', [ClientController::class, 'storeOrder'])->name('order.store');
+            Route::post('/order/create', [ClientController::class, 'createOrder'])->name('order.create');
+            Route::get('/orders/manage', [ClientController::class, 'manageOrders'])->name('client.orders.manage');
+            Route::post('/orders/{orderId}/update', [ClientController::class, 'updateOrderStatus'])->name('client.orders.update');
+
         });
     });
 });

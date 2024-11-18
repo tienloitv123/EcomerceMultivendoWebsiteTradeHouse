@@ -13,6 +13,8 @@ use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Shop;
 use App\Models\CartDetail;
+use App\Models\Order;
+use App\Models\OrderDetail;
 
 use App\Models\VerificationToken;
 use Illuminate\Support\Facades\File;
@@ -192,12 +194,54 @@ class ClientController extends Controller
         }
     }
 
+    // public function showCart()
+    // {
+    //     $cart = Cart::where('client_id', auth('client')->id())->first();
+
+    //     if (!$cart || $cart->cartDetails()->count() == 0) {
+    //         return view('back.page.client.cart')->with('message', 'Your cart is empty.');
+    //     }
+
+    //     $cartDetails = $cart->cartDetails()
+    //         ->with(['product' => function ($query) {
+    //             $query->select('id', 'name', 'price', 'compare_price', 'product_image', 'seller_id');
+    //         }])
+    //         ->get()
+    //         ->groupBy('product.seller_id');
+
+    //     $cartShops = [];
+
+    //     foreach ($cartDetails as $sellerId => $details) {
+    //         $shop = Shop::where('seller_id', $sellerId)->first();
+
+    //         $shopTotal = 0;
+
+    //         foreach ($details as $detail) {
+    //             $shopTotal += $detail->product->price * $detail->quantity;
+    //         }
+
+    //         $cartShops[] = [
+    //             'shop_id' => $sellerId,  // Thêm shop_id ở đây
+    //             'shop_name' => $shop->shop_name ?? 'Unknown Shop',
+    //             'items' => $details,
+    //             'total' => $shopTotal,
+    //         ];
+    //     }
+
+    //     return view('back.page.client.cart', compact('cartShops'));
+    // }
+
+
+
     public function showCart()
     {
+        $cartShops = []; // Định nghĩa biến $cartShops mặc định là mảng rỗng
+
         $cart = Cart::where('client_id', auth('client')->id())->first();
 
         if (!$cart || $cart->cartDetails()->count() == 0) {
-            return view('back.page.client.cart')->with('message', 'Your cart is empty.');
+            return view('back.page.client.cart', compact('cartShops'))
+                ->with('message', 'Your cart is empty. Add items to your cart to proceed.');
         }
 
         $cartDetails = $cart->cartDetails()
@@ -206,8 +250,6 @@ class ClientController extends Controller
             }])
             ->get()
             ->groupBy('product.seller_id');
-
-        $cartShops = [];
 
         foreach ($cartDetails as $sellerId => $details) {
             $shop = Shop::where('seller_id', $sellerId)->first();
@@ -219,7 +261,7 @@ class ClientController extends Controller
             }
 
             $cartShops[] = [
-                'shop_id' => $sellerId,  // Thêm shop_id ở đây
+                'shop_id' => $sellerId,
                 'shop_name' => $shop->shop_name ?? 'Unknown Shop',
                 'items' => $details,
                 'total' => $shopTotal,
@@ -237,15 +279,12 @@ class ClientController extends Controller
         'quantity' => 'required|integer|min:1',
     ]);
 
-    // Tìm cartDetail và cập nhật số lượng
     $cartDetail = CartDetail::find($request->cart_detail_id);
     $cartDetail->quantity = $request->quantity;
     $cartDetail->save();
 
-    // Tính tổng giá trị của sản phẩm
     $totalPrice = $cartDetail->quantity * $cartDetail->price;
 
-    // Tính tổng giá của shop sau khi cập nhật số lượng cho tất cả các sản phẩm có cùng seller_id trong cart
     $shopTotal = $cartDetail->cart->cartDetails()
                      ->where('seller_id', $cartDetail->seller_id)
                      ->sum(DB::raw('quantity * price'));
@@ -259,7 +298,33 @@ class ClientController extends Controller
     ]);
 }
 
+// public function addToCart(Request $request)
+// {
+//     if (!auth('client')->check()) {
+//         return redirect()->route('client.login')->with('fail', 'You need to log in to add products to the cart.');
+//     }
+//     $request->validate([
+//         'product_id' => 'required|integer|exists:products,id',
+//         'quantity' => 'required|integer|min:1',
+//     ]);
+//     $product_id = $request->product_id;
+//     $quantity = $request->quantity;
+//     $product = Product::findOrFail($product_id);
+//     $cart = Cart::firstOrCreate(
+//         ['client_id' => auth('client')->id()],
+//         ['created_at' => now()]
+//     );
+//     $cartDetail = $cart->cartDetails()->updateOrCreate(
+//         ['cart_id' => $cart->id, 'product_id' => $product_id],
+//         [
+//             'quantity' => DB::raw("quantity + $quantity"),
+//             'price' => $product->price,
+//             'seller_id' => $product->seller_id,
+//         ]
+//     );
+//     return redirect()->back()->with('success', 'Product added to cart successfully!');
 
+// }
 
 
 public function addToCart(Request $request)
@@ -267,53 +332,35 @@ public function addToCart(Request $request)
     if (!auth('client')->check()) {
         return redirect()->route('client.login')->with('fail', 'You need to log in to add products to the cart.');
     }
+
     $request->validate([
         'product_id' => 'required|integer|exists:products,id',
         'quantity' => 'required|integer|min:1',
     ]);
+
     $product_id = $request->product_id;
     $quantity = $request->quantity;
     $product = Product::findOrFail($product_id);
+
     $cart = Cart::firstOrCreate(
         ['client_id' => auth('client')->id()],
         ['created_at' => now()]
     );
-    $cartDetail = $cart->cartDetails()->updateOrCreate(
-        ['cart_id' => $cart->id, 'product_id' => $product_id],
-        [
-            'quantity' => DB::raw("quantity + $quantity"),
+    $cartDetail = $cart->cartDetails()->where('product_id', $product_id)->first();
+
+    if ($cartDetail) {
+        $cartDetail->quantity += $quantity;
+        $cartDetail->save();
+    } else {
+        $cart->cartDetails()->create([
+            'product_id' => $product_id,
+            'quantity' => $quantity,
             'price' => $product->price,
             'seller_id' => $product->seller_id,
-        ]
-    );
+        ]);
+    }
     return redirect()->back()->with('success', 'Product added to cart successfully!');
-
 }
-
-// public function updateCartQuantity(Request $request)
-// {
-//     $request->validate([
-//         'cart_detail_id' => 'required|integer|exists:cart_details,id',
-//         'quantity' => 'required|integer|min:1',
-//     ]);
-
-//     $cartDetail = CartDetail::find($request->cart_detail_id);
-//     $cartDetail->quantity = $request->quantity;
-//     $cartDetail->save();
-
-//     $shopTotal = $cartDetail->cart->cartDetails()
-//                      ->where('seller_id', $cartDetail->seller_id)
-//                      ->sum(DB::raw('quantity * price'));
-
-//     return response()->json([
-//         'success' => true,
-//         'totalPrice' => number_format($cartDetail->quantity * $cartDetail->price, 2),
-//         'shopTotal' => number_format($shopTotal, 2),
-//         'shop_id' => $cartDetail->seller_id,
-//         'message' => 'Quantity updated successfully!',
-//     ]);
-// }
-
 
 public function removeItem(Request $request)
 {
@@ -329,5 +376,189 @@ public function removeItem(Request $request)
         'message' => 'Item removed from cart.'
     ]);
 }
+
+
+ public function createOrder(Request $request)
+{
+    $request->validate([
+        'shipping_address' => 'required|min:5',
+        'phone' => 'required|min:5',
+        'payment_method' => 'required|in:COD,CreditCard,PayPal',
+        'seller_id' => 'required|integer|exists:sellers,id',
+    ]);
+
+    $client = auth('client')->user();
+    $sellerId = $request->input('seller_id');
+
+    $cart = Cart::where('client_id', $client->id)->first();
+    $cartDetails = $cart->cartDetails()->where('seller_id', $sellerId)->with('product')->get();
+
+    $totalAmount = $cartDetails->sum(function ($detail) {
+        return $detail->quantity * $detail->product->price;
+    });
+
+    $order = Order::create([
+        'client_id' => $client->id,
+        'order_number' => 'ORDER-' . time() . '-' . rand(1000, 9999),
+        'total_amount' => $totalAmount,
+        'status' => 'pending',
+        'payment_method' => $request->payment_method,
+        'payment_status' => 'unpaid',
+        'shipping_address' => $request->shipping_address,
+        'phone' => $request->phone,
+    ]);
+
+    foreach ($cartDetails as $detail) {
+        OrderDetail::create([
+            'order_id' => $order->id,
+            'product_id' => $detail->product_id,
+            'seller_id' => $detail->seller_id,
+            'quantity' => $detail->quantity,
+            'price' => $detail->product->price,
+            'total' => $detail->quantity * $detail->product->price,
+        ]);
+    }
+
+    $cart->cartDetails()->where('seller_id', $sellerId)->delete();
+
+    // Gửi email cho client
+    $clientMailData = [
+        'order' => $order,
+        'orderDetails' => $order->orderDetails,
+    ];
+
+    $clientMailBody = view('email-templates.order-confirmation-client', $clientMailData)->render();
+
+    $clientMailConfig = [
+        'mail_from_email' => env('EMAIL_FROM_ADDRESS'),
+        'mail_from_name' => env('EMAIL_FROM_NAME'),
+        'mail_recipient_email' => $client->email,
+        'mail_recipient_name' => $client->name,
+        'mail_subject' => 'Order Confirmation',
+        'mail_body' => $clientMailBody,
+    ];
+
+    sendEmail($clientMailConfig);
+
+    return redirect()->route('client.cart')->with('success', 'Your order has been created successfully!');
+}
+
+public function previewOrder(Request $request)
+{
+    $client = auth('client')->user();
+    $sellerId = $request->input('seller_id'); // get seller_id
+
+    $cart = Cart::with(['cartDetails' => function ($query) use ($sellerId) {
+        $query->where('seller_id', $sellerId)->with('product');
+    }])->where('client_id', $client->id)->first();
+
+    if (!$cart || $cart->cartDetails->isEmpty()) {
+        return redirect()->route('client.cart')->with('fail', 'Không có sản phẩm nào trong giỏ hàng của seller này.');
+    }
+
+    $totalAmount = $cart->cartDetails->sum(function ($detail) {
+        return $detail->quantity * $detail->product->price;
+    });
+
+    return view('back.page.client.order.preview', [
+        'shipping_address' => $client->address,
+        'phone' => $client->phone,
+        'payment_method' => 'COD',
+        'cartDetails' => $cart->cartDetails,
+        'totalAmount' => $totalAmount,
+        'seller_id' => $sellerId,
+    ]);
+}
+
+
+public function manageOrders()
+{
+    $clientId = auth('client')->id();
+    $orders = Order::where('client_id', $clientId)->with('orderDetails.product')->get();
+
+    return view('back.page.client.manage-orders', compact('orders'));
+}
+
+public function updateOrderStatus(Request $request, $orderId)
+{
+    $order = Order::where('id', $orderId)
+                  ->where('client_id', auth('client')->id())
+                  ->first();
+
+    if (!$order) {
+        return redirect()->back()->with('fail', 'Order not found.');
+    }
+
+    $action = $request->input('action');
+
+    if ($action === 'cancel' && $order->status === 'pending') {
+        $order->update(['status' => 'rejected']);
+        return redirect()->back()->with('success', 'Order canceled successfully.');
+    }
+
+    if ($action === 'received' && $order->status === 'delivery') {
+        $order->update(['status' => 'completed']);
+        return redirect()->back()->with('success', 'Order marked as received.');
+    }
+
+    return redirect()->back()->with('fail', 'Invalid action or order status.');
+}
+
+
+// //Store Order Into Database.
+// public function storeOrder(Request $request)
+// {
+//     $request->validate([
+//         'shipping_address' => 'required|min:5',
+//         'phone' => 'required|min:10',
+//         'payment_method' => 'required|in:COD,CreditCard,PayPal',
+//         'seller_id' => 'required|integer|exists:sellers,id',
+//     ]);
+
+//     $client = auth('client')->user();
+//     $sellerId = $request->input('seller_id');
+
+//     // Lấy Cart liên quan đến client
+//     $cart = Cart::with(['cartDetails' => function ($query) use ($sellerId) {
+//         $query->where('seller_id', $sellerId)->with('product');
+//     }])->where('client_id', $client->id)->first();
+
+//     // Nếu không có cart hoặc sản phẩm
+//     if (!$cart || $cart->cartDetails->isEmpty()) {
+//         return redirect()->route('client.cart')->with('fail', 'Giỏ hàng của bạn không hợp lệ.');
+//     }
+
+//     // Tạo đơn hàng
+//     $order = Order::create([
+//         'client_id' => $client->id,
+//         'order_number' => 'ORDER-' . time() . '-' . rand(1000, 9999),
+//         'total_amount' => $cart->cartDetails->sum(function ($detail) {
+//             return $detail->quantity * $detail->product->price;
+//         }),
+//         'status' => 'pending',
+//         'payment_method' => $request->payment_method,
+//         'payment_status' => 'unpaid',
+//         'shipping_address' => $request->shipping_address,
+//         'phone' => $request->phone,
+//     ]);
+
+//     // Lưu chi tiết đơn hàng
+//     foreach ($cart->cartDetails as $detail) {
+//         OrderDetail::create([
+//             'order_id' => $order->id,
+//             'product_id' => $detail->product_id,
+//             'seller_id' => $detail->seller_id,
+//             'quantity' => $detail->quantity,
+//             'price' => $detail->product->price,
+//             'total' => $detail->quantity * $detail->product->price,
+//         ]);
+//     }
+
+//     // Xóa sản phẩm thuộc seller_id khỏi giỏ hàng
+//     $cart->cartDetails()->where('seller_id', $sellerId)->delete();
+
+//     return redirect()->route('client.cart')->with('success', 'Đơn hàng của bạn đã được tạo thành công!');
+// }
+
 
 }
