@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Client;
+use App\Models\Seller;
 use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -272,6 +273,24 @@ class AdminController extends Controller
         }else{
             return response()->json(['status'=>0,'msg'=>'Something went wrong.']);
         }
+    }
+    //Show fucntion use in (show Client and Seller)
+    //     public function clientList()
+    // {
+    //     $clients = Client::all();
+    //     return view('', compact('clients'));
+    // }
+
+    public function manageClients()
+    {
+        $clients = Client::paginate(10); // Phân trang 10 client mỗi trang
+        return view('back.page.admin.manage-client', compact('clients'));
+    }
+
+    public function manageSellers()
+    {
+        $sellers = Seller::paginate(10); // Phân trang 10 seller mỗi trang
+        return view('back.page.admin.manage-seller', compact('sellers'));
     }
 
 }

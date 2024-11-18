@@ -15,6 +15,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/password/reset/{token}',[AdminController::class,'resetPassword'])->name('reset-password');
         Route::post('/reset-password-handler',[AdminController::class,'resetPasswordHandler'])->name('reset-password-handler');
         Route::post('/reset-password-handler',[AdminController::class,'resetPasswordHandler'])->name('reset-password-handler');
+
     });
 
     Route::middleware(['auth:admin','PreventBackHistory'])->group(function () {
@@ -27,6 +28,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::post('/change-logo',[AdminController::class, 'changeLogo' ])->name('change-logo');
         Route::post('/change-favicon', [AdminController::class, 'changeFavicon' ])->name('change-favicon');
         Route::view('/categories','back.page.admin.categories')->name('categories');
+        Route::get('/manage-clients', [AdminController::class, 'manageClients'])->name('manage.clients');
+        Route::get('/manage-sellers', [AdminController::class, 'manageSellers'])->name('manage.sellers');
 
 
         //CATEGORIES AND SUB CATEGORIES MANAGEMENT

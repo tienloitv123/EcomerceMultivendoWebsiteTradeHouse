@@ -14,6 +14,11 @@ Route::prefix('client')->name('client.')->group(function() {
             Route::get('/register-success', 'registerSuccess')->name('register-success');
             Route::get('/cart', [ClientController::class, 'viewCart'])->name('cart.view');
             Route::post('/add-to-cart', [ClientController::class, 'addToCart'])->name('cart.add');
+            Route::get('/forgot-password', [ClientController::class, 'forgotPassword'])->name('forgot-password');
+            Route::post('/send-password-reset-link', [ClientController::class, 'sendPasswordResetLink'])->name('send-password-reset-link');
+            Route::get('/reset-password/{token}', [ClientController::class, 'showResetForm'])->name('reset-password');
+            Route::post('/reset-password-handler', [ClientController::class, 'resetPasswordHandler'])->name('reset-password-handler');
+
         });
     });
 
@@ -31,9 +36,8 @@ Route::prefix('client')->name('client.')->group(function() {
             Route::get('/order/preview', [ClientController::class, 'previewOrder'])->name('order.preview');
             Route::post('/order/store', [ClientController::class, 'storeOrder'])->name('order.store');
             Route::post('/order/create', [ClientController::class, 'createOrder'])->name('order.create');
-            Route::get('/orders/manage', [ClientController::class, 'manageOrders'])->name('client.orders.manage');
-            Route::post('/orders/{orderId}/update', [ClientController::class, 'updateOrderStatus'])->name('client.orders.update');
-
+            Route::get('/orders/manage', [ClientController::class, 'manageOrders'])->name('orders.manage');
+            Route::post('/orders/{orderId}/update', [ClientController::class, 'updateOrderStatus'])->name('orders.update');
         });
     });
 });

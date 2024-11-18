@@ -33,6 +33,9 @@ Route::prefix('seller')->name('seller.')->group(function(){
             Route::post('/change-profile-picture','changeProfilePicture')->name('change-profile-picture');
             Route::get('/shop-settings','shopSettings')->name('shop-settings');
             Route::post('/shop-setup','shopSetup')->name('shop-setup');
+            Route::get('/orders/manage', [SellerController::class, 'manageOrders'])->name('orders.manage');
+            Route::post('/orders/{orderId}/update', [SellerController::class, 'updateOrderStatus'])->name('orders.update');
+       
         });
 
           //Product routes
@@ -45,7 +48,7 @@ Route::prefix('seller')->name('seller.')->group(function(){
            Route::get('/edit','editProduct')->name('edit-product');
            Route::post('/update','updateProduct')->name('update-product');
            Route::post('/delete-product','deleteProduct')->name('delete-product');
-        });
+     });
     });
     });
 });

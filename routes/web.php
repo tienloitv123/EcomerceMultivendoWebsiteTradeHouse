@@ -40,6 +40,8 @@ Route::get('/api/subcategories', function (Request $request) {
                       ->get();
 });
 Route::get('/contact-us', [FrontEndController::class, 'getContactDetails'])->name('contact-us');
+Route::get('/shop/{id}', [FrontEndController::class, 'viewShop'])->name('shop.view');
+Route::get('/shop/seller/{sellerId}', [FrontEndController::class, 'viewShopBySeller'])->name('shop.view.bySeller');
 
 // Route::get('/general-settings', [FrontEndController::class, 'getGeneralSettings'])->name('general-settings');
 

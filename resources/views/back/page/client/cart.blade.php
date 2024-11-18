@@ -9,8 +9,10 @@
     @elseif(!empty($cartShops) && count($cartShops) > 0)
         @foreach ($cartShops as $shop)
             <div class="cart-shop pt-4 mt-1 mb-1 border border-dark border-right-0 border-left-0">
-                <h5 class="fw-bold mb-4"><a href=""> Shop : {{ $shop['shop_name'] }} </a></h5>
-
+                {{-- <h5 class="fw-bold mb-4"><a href="{{ route('shop.view', $shop['shop_id']) }}"> Shop : {{ $shop['shop_name'] }} </a></h5> --}}
+                <h5 class="fw-bold mb-4">
+                    <a href="{{ route('shop.view.bySeller', $shop['shop_id']) }}">Shop: {{ $shop['shop_name'] }}</a>
+                </h5>
                 @foreach ($shop['items'] as $item)
                     <div class="row align-items-center border-bottom py-3" id="cart-item-{{ $item->id }}">
                         <div class="col-2">

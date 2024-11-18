@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <header class="pb-md-4 pb-0">
     <div class="top-nav top-header sticky-header">
         <div class="container-fluid-lg">
@@ -60,15 +61,19 @@
                                     </div>
                                 </li>
                                 <li class="right-side">
-                                    <div class="onhover-dropdown header-badge">
+                                    <div class="header-badge">
                                         <button type="button" class="btn p-0 position-relative header-wishlist">
-                                           <a href="{{ route('client.cart') }}"><i class="ijaboIcon icon-copy dw dw-shopping-cart2"></i></a>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge">?
+                                            <a href="{{ route('client.cart') }}">
+                                                <i class="ijaboIcon icon-copy dw dw-shopping-cart2"></i>
+                                            </a>
+                                            <span class="position-absolute top-0 start-100 translate-middle badge">
+                                                {{ $cartItemCount ?? 0 }}
                                                 <span class="visually-hidden">unread messages</span>
                                             </span>
                                         </button>
                                     </div>
                                 </li>
+
                                 <li class="right-side onhover-dropdown">
                                     <div class="delivery-login-box">
                                         <div class="delivery-icon">
@@ -90,6 +95,11 @@
                                                 <li class="product-box-contain">
                                                     <a href="{{ route('client.profile') }}"><i class="icon-copy dw dw-user-2"></i> Profile</a>
                                                 </li>
+                                                <li class="product-box-contain">
+                                                    <a href="{{ route('client.orders.manage') }}">
+                                                        <i class="bi bi-box-fill"></i> Order
+                                                    </a>
+                                              </li>
                                                 <li class="product-box-contain">
                                                     <a href="{{ route('client.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                                         <i class="icon-copy dw dw-logout"></i> Logout
@@ -127,19 +137,20 @@
         <div class="row">
             <div class="col-12">
                 <div class="header-nav d-flex align-items-center justify-content-between">
-                    <!-- Browse Categories Button -->
                     <div class="header-nav-left d-flex align-items-center">
-                        <button class="dropdown-category">
-                            <i class="ijaboIcon icon-copy bi bi-list-nested"></i>
-                            <span>&nbsp;Browse Categories</span>
+                        <button class="dropdown-category btn btn-dark">
+                            <i class="ijaboIcon icon-copy bi bi-view-list"></i>
+                            <span> Categories</span>
                         </button>
 
                         <div class="category-dropdown">
-                            <div class="category-title">
-                                <h5>Categories</h5>
-                                <button type="button" class="btn p-0 close-button text-content">
-                                    <i class="fa fa-xmark"></i>
-                                </button>
+                            <div class="category-title border border-dark p-3 rounded" style="background-color: #ffffff;">
+                                {{-- <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="fw-bold m-0">Categories</h5>
+                                    <button type="button" class="btn btn-sm btn-outline-dark">
+                                        Close
+                                    </button>
+                                </div> --}}
                             </div>
 
                             @if (count(get_categories()) > 0)
@@ -183,7 +194,7 @@
                     </div>
 
                     <!-- Centered Navigation Links -->
-                    <div class="header-nav-middle d-flex align-items-center">
+                    <div class="header-nav-middle mr-40 d-flex align-items-center">
                         <ul class="navbar-nav d-flex flex-row align-items-center" style="gap: 1.5rem;">
                             <li class="nav-item">
                                 <a class="nav-link" href="/">Home</a>

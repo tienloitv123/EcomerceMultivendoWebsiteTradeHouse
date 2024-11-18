@@ -314,8 +314,8 @@
                         </li>
 
                         <li>
-                            <a href="invoice.html" class="dropdown-toggle no-arrow">
-                                <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
+                            <a href="#" class="dropdown-toggle no-arrow">
+                                <span class="micon bi bi-receipt-cutoff"></span><span class="mtext"></span>
                             </a>
 
                         </li>
@@ -332,26 +332,34 @@
                         <li>
                             <div class="sidebar-small-cap">Setting</div>
                         </li>
-
+                        <li class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle">
+                                <span class="micon bi bi-bag"></span><span class="mtext">User Manage</span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="{{ route('admin.manage.clients') }}" class="">
+                                        Client
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.manage.sellers') }}" class="">
+                                        Seller
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="{{ route('admin.profile') }}"
                                 class="dropdown-toggle no-arrow {{ Route::is('admin.profile') ? 'active' : '' }}">
                                 <span class="micon fa fa-user"></span>
                                 <span class="mtext">Profile</span>
                             </a>
-                            <a href="{{ route('admin.usermanage') }}"
-                                class="dropdown-toggle no-arrow {{ Route::is('admin.usermanage') ? 'active' : '' }}">
-                                <span class="micon fa fa-user-plus"></span>
-                                <span class="mtext">User manage</span>
-                            </a>
-
                             <a href="{{ route('admin.setting') }}"
                                 class="dropdown-toggle no-arrow {{ Route::is('admin.setting') ? 'active' : '' }} ">
                                 <span class="micon fa fa-cog"></span>
                                 <span class="mtext">Setting</span>
                             </a>
-
-
                         </li>
                     @else()
                         <li>
@@ -361,8 +369,8 @@
                         </li>
 
                         <li>
-                            <a href="invoice.html" class="dropdown-toggle no-arrow">
-                                <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
+                            <a href="{{ route('seller.orders.manage') }}" class="dropdown-toggle no-arrow">
+                                <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Order List</span>
                             </a>
                         </li>
                         <li class="dropdown">

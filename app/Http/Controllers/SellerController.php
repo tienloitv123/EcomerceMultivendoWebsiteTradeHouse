@@ -8,6 +8,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Seller;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\VerificationToken;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -168,7 +170,7 @@ class SellerController extends Controller
          'pageTitle' => 'Forgot Password'
         ];
         return view('back.page.seller.auth.forgot',$data);
-     } 
+     }
 
      public function sendPasswordResetLink(Request $request){
          //Validate the form
@@ -418,4 +420,33 @@ class SellerController extends Controller
             return redirect()->route('seller.shop-settings')->with('fail','Error on updating your shop info.');
         }
     }
+
+    public function manageOrders()
+{
+    $sellerId = auth('seller')->id();
+
+    // Get all orders related to this seller
+    $orders = OrderDetail::with(['order', 'product'])
+        ->where('seller_id', $sellerId)
+        ->get();
+
+    return view('back.page.seller.orders-manage', compact('orders'));
+}
+
+public function updateOrderStatus(Request $request, $orderId)
+{
+    $request->validate([
+        'status' => 'required|in:accepted,rejected,delivery',
+    ]);
+
+    $orderDetail = OrderDetail::where('id', $orderId)
+        ->where('seller_id', auth('seller')->id())
+        ->firstOrFail();
+
+    $orderDetail->order->update(['status' => $request->status]);
+
+    return redirect()->route('seller.orders.manage')
+        ->with('success', 'Order status updated successfully.');
+}
+
 }

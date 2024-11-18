@@ -39,7 +39,7 @@
             </div>
             <div class="col-6">
                 <div class="forgot-password">
-                    <a href="#">Forgot Password</a>
+                    <a href="{{ route('client.forgot-password') }}">Forgot Password</a>
                 </div>
             </div>
         </div>

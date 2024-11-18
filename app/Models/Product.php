@@ -34,4 +34,10 @@ class Product extends Model
             ]
         ];
     }
+
+    public function shop()
+{
+    return $this->hasOne(Shop::class, 'seller_id', 'seller_id');
+}
+
 }

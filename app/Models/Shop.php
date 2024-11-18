@@ -18,4 +18,9 @@ class Shop extends Model
         'shop_logo'
     ];
 
+    public function seller()
+{
+    return $this->belongsTo(Seller::class, 'seller_id');
+}
+
 }

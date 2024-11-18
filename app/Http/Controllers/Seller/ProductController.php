@@ -43,13 +43,9 @@ class ProductController extends Controller
     }
 
     public function createProduct(Request $request){
-        /**
-         * VALIDATE THE FORM
-         * -----------------
-         */
         $request->validate([
             'name'=>'required|unique:products,name',
-            'summary'=>'required|min:100',
+            'summary'=>'required|min:20',
             'product_image'=>'required|mimes:png,jpg,jpeg,jfif|max:1024',
             'category'=>'required|exists:categories,id',
             'subcategory'=>'required|exists:sub_categories,id',
@@ -70,19 +66,7 @@ class ProductController extends Controller
             $path = 'images/products/';
             $file = $request->file('product_image');
             $filename = 'PIMG_'.time().uniqid().'.'.$file->getClientOriginalExtension();
-
             $upload = $file->move(public_path($path), $filename);
-            // $maxWidth = 1080;
-            // $maxHeight = 1080;
-            // $full_path = $path.$filename;
-            // $image = Image::make($file->path());
-
-            // $image->height() > $image->width() ? $maxWidth = null : $maxHeight = null;
-            // $image->fit($maxWidth, $maxHeight, function($constraint){
-            //       $constraint->upsize();
-            // });
-            // $upload = $image->save($full_path);
-
             if( $upload ){
                 $product_image = $filename;
             }
@@ -137,7 +121,7 @@ class ProductController extends Controller
 
          $request->validate([
             'name'=>'required|unique:products,name,'.$product->id,
-            'summary'=>'required|min:100',
+            'summary'=>'required|min:20',
             'product_image'=>'nullable|mimes:png,jpg,jpeg|max:1024',
             'subcategory'=>'required|exists:sub_categories,id',
             'price'=>['required', new ValidatePrice],
@@ -205,14 +189,14 @@ class ProductController extends Controller
     }
     public function show($id)
     {
+        // $product = Product::findOrFail($id);
         $product = Product::findOrFail($id);
-
-        $relatedProducts = Product::where('seller_id', $product->seller_id)
+        $relatedProducts = Product::inRandomOrder()->where('seller_id', $product->seller_id)
                                 ->where('id', '!=', $product->id)
                                 ->take(6)
                                 ->get();
-
         return view('front.page.product-detail', compact('product', 'relatedProducts'));
+
     }
 
 
