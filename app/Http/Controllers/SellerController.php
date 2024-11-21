@@ -111,12 +111,60 @@ class SellerController extends Controller
         return view('back.page.seller.auth.register',$data);
     }
 
-    public function home(Request $request){
-        $data = [
-            'pageTitle'=>'Seller Dashboard'
-        ];
-        return view('back.page.seller.home',$data);
-    }
+    // public function home(Request $request){
+
+    //     $data = [
+    //         'pageTitle'=>'Seller Dashboard'
+    //     ];
+    //     return view('back.page.seller.home',$data);
+    // }
+    public function home(Request $request)
+{
+    $dailyRevenue = Order::whereDate('created_at', now())->sum('total_amount');
+    $monthlyRevenue = Order::whereMonth('created_at', now()->month)->sum('total_amount');
+    $yearlyRevenue = Order::whereYear('created_at', now()->year)->sum('total_amount');
+
+    // Tổng số sản phẩm đã bán
+    $totalProductsSold = OrderDetail::sum('quantity');
+
+    // Thống kê đơn hàng
+    $completedOrders = Order::where('status', 'completed')->count();
+    $processingOrders = Order::where('status', 'Pending')->count();
+    $canceledOrders = Order::where('status', 'Rejected')->count();
+
+    // Doanh thu theo thời gian
+    $revenueData = Order::selectRaw('DATE(created_at) as date, SUM(total_amount) as revenue')
+        ->whereYear('created_at', now()->year)
+        ->groupBy('date')
+        ->orderBy('date', 'asc')
+        ->get();
+
+    // Top 5 sản phẩm bán chạy
+    $topProducts = OrderDetail::select('product_id', DB::raw('SUM(quantity) as total_sold'))
+        ->groupBy('product_id')
+        ->orderBy('total_sold', 'desc')
+        ->take(5)
+        ->with('product') // Đảm bảo quan hệ product đã được định nghĩa
+        ->get();
+
+    // Thống kê trạng thái đơn hàng
+    $orderStats = [
+        'completed' => $completedOrders,
+        'processing' => $processingOrders,
+        'canceled' => $canceledOrders,
+    ];
+
+    return view('back.page.seller.home', compact(
+        'dailyRevenue',
+        'monthlyRevenue',
+        'yearlyRevenue',
+        'totalProductsSold',
+        'revenueData',
+        'orderStats',
+        'topProducts'
+    ));
+}
+
 
     public function loginHandler(Request $request){
         $fieldType = filter_var($request->login_id, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';

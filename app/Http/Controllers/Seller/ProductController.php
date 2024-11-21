@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Rules\ValidatePrice;
 use Illuminate\Support\Facades\File;
+use App\Models\Shop;
 use Intervention\Image\Facades\Image;
 class ProductController extends Controller
 {
@@ -195,22 +196,27 @@ class ProductController extends Controller
                                 ->where('id', '!=', $product->id)
                                 ->take(6)
                                 ->get();
-        return view('front.page.product-detail', compact('product', 'relatedProducts'));
+        $shop = Shop::where('seller_id', $product->seller_id)->first();
+        return view('front.page.product-detail', compact('product', 'relatedProducts','shop'));
 
     }
-
 
 
     public function search(Request $request)
-    {
-        $searchTerm = $request->input('query'); // Get the search term from the query parameter
+{
+    $searchTerm = $request->input('query'); // Get the search term from the query parameter
 
-        $products = Product::where('name', 'LIKE', '%' . $searchTerm . '%')
-                    ->where('visibility', 1) // Assuming visibility = 1 means the product is visible
-                    ->paginate(10); // You can set the pagination limit as needed
+    // Search for products matching the term
+    $products = Product::where('name', 'LIKE', '%' . $searchTerm . '%')
+                ->where('visibility', 1) // Assuming visibility = 1 means the product is visible
+                ->paginate(9); // Adjust pagination as needed
 
-        return view('front.page.search_results', compact('products', 'searchTerm'));
-    }
+    // Search for shops matching the term
+    $shops = Shop::where('shop_name', 'LIKE', '%' . $searchTerm . '%')->get();
+
+    return view('front.page.search_results', compact('products', 'shops', 'searchTerm'));
+}
+
 
         public function children()
     {
@@ -242,7 +248,7 @@ class ProductController extends Controller
         }
 
         // Paginate the filtered results
-        $products = $query->paginate(10);
+        $products = $query->where('visibility', 1)->paginate(9);
 
         // Retrieve all categories with subcategories for the filter dropdowns
         $categories = Category::with('subcategories.children')->get();
@@ -258,10 +264,9 @@ class ProductController extends Controller
 {
     $category = Category::findOrFail($id);
 
-    // Fetch products by category and include visibility check
     $products = Product::where('category', $id)
         ->where('visibility', 1)
-        ->paginate(10);
+        ->paginate(9);
 
     return view('front.page.category_search_results', compact('products', 'category'));
 }

@@ -309,15 +309,8 @@
                         <li>
                             <a href="{{ route('admin.home') }}"
                                 class="dropdown-toggle no-arrow {{ Route::is('admin.home') ? 'active' : '' }}">
-                                <span class="micon fa fa-home"></span><span class="mtext">Home</span>
+                                <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Dashboard</span>
                             </a>
-                        </li>
-
-                        <li>
-                            <a href="#" class="dropdown-toggle no-arrow">
-                                <span class="micon bi bi-receipt-cutoff"></span><span class="mtext"></span>
-                            </a>
-
                         </li>
                         <li>
                             <a href="{{ route('admin.manage-categories.cats-subcats-list') }}"
@@ -334,7 +327,7 @@
                         </li>
                         <li class="dropdown">
                             <a href="javascript:;" class="dropdown-toggle">
-                                <span class="micon bi bi-bag"></span><span class="mtext">User Manage</span>
+                               <span class="micon bi bi-people-fill"></span><span class="mtext">User Manage</span>
                             </a>
                             <ul class="submenu">
                                 <li>

@@ -50,18 +50,6 @@ class frontEndController extends Controller
         return view('front.page.contact-us', compact('settings'));
     }
 
-//     public function viewShop($id)
-// {
-//     // Find the shop with its seller details
-//     $shop = Shop::with('seller')->findOrFail($id);
-
-//     // Fetch products for this shop
-//     $products = Product::where('seller_id', $shop->seller_id)
-//                        ->where('visibility', 1) // Only visible products
-//                        ->paginate(12);
-
-//     return view('front.page.shop-view', compact('shop', 'products'));
-// }
 public function viewShop($shopId)
 {
     // Fetch the shop by ID
@@ -70,9 +58,9 @@ public function viewShop($shopId)
     // Fetch products for this shop using the seller_id linked to the shop
     $products = Product::where('seller_id', $shop->seller_id)
                        ->where('visibility', 1) // Only visible products
-                       ->paginate(12);
+                       ->paginate(9);
 
-    return view('front.page.shop.view', compact('shop', 'products'));
+    return view('front.page.shop-view', compact('shop', 'products'));
 }
 
 public function viewShopBySeller($sellerId)
@@ -83,9 +71,8 @@ public function viewShopBySeller($sellerId)
     // Fetch products for this shop using the seller_id
     $products = Product::where('seller_id', $sellerId)
                        ->where('visibility', 1) // Only visible products
-                       ->paginate(12);
+                       ->paginate(9);
 
     return view('front.page.shop-view', compact('shop', 'products'));
 }
-
 }

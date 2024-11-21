@@ -5,27 +5,26 @@
 <!-- Home Section Start -->
 <section class="home-section pt-2">
     <div class="container-fluid-lg">
-        <div class="row g-4">
+        {{-- <div class="row g-4">
             <div class="col-xl-8 ratio_65">
-                <div class="home-contain h-100 ">
-                    <div class="h-100">
-                        <img src="/front/images/home-banner-1.png" class="bg-img   lazyload" alt>
-                    </div>
-                    <div class="home-detail p-center-left w-75">
-                        <div>
-                            <h1 class="text-uppercase">Cyka Blyat &
-                                delivered your <span class="daily">Daily
-                                    Needs</span></h1>
-                            <p class="w-75 d-none d-sm-block">Justo
-                                placerat habitant vitae mollis rhoncus
-                                ut
-                                bibendum vivamus penatibus pretium dis
-                                duis dictumst elementum cum felis.</p>
-                        </div>
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                      <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img class="d-block w-100" src="/front/images/banner1.png" alt="First slide">
+                      <div class="carousel-item">
+                        <img class="d-block w-100" src="/front/images/home-banner-2.png" alt="Second slide">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="d-block w-100" src="/front/images/home-banner-3.png" alt="Third slide">
+                      </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-xl-4 ratio_65">
                 <div class="row g-4">
                     <div class="col-xl-12 col-md-6">
@@ -64,7 +63,33 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img class="d-block w-100" src="/front/images/banner1.png" alt="First slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100" src="/front/images/banner2.png" alt="Second slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100" src="/front/images/banner3.png" alt="Third slide">
+              </div>
+            </div>
         </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
 </section>
 <!-- Home Section End -->
@@ -255,7 +280,7 @@
                     </div> --}}
 
                 <div class="title">
-                    <h2>Shop by Categories</h2>
+                    <h2>Shopping by Categories</h2>
                 </div>
 
                 @if ( count(get_categories()) > 0 )
@@ -279,495 +304,6 @@
 
                 @endif
 
-                <div class="title d-block">
-                    <h2>Our Best Seller</h2>
-                    <p>Fusce natoque scelerisque luctus arcu lobortis
-                        ultricies ullamcorper ante dictumst, cum eros
-                        vitae curabitur hendrerit habitant rhoncus id
-                        tellus in</p>
-                </div>
-
-                <div class="product-border overflow-hidden wow fadeInUp">
-                    <div class="product-box-slider no-arrow">
-                        <div>
-                            <div class="row m-0">
-                                <div class="col-12 px-0">
-                                    <div class="product-box">
-                                        <div class="product-image">
-                                            <a href="product-detail.html">
-                                                <img src="/front/images/product img place holder 1.png"
-                                                    class="img-fluid   lazyload" alt>
-                                            </a>
-                                            <ul class="product-option">
-                                                <li title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
-                                                        <i class="ijaboIcon sx-1 dw dw-eye"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Compare">
-                                                    <a href="compare.html">
-                                                        <i class="icon-copy dw dw-exchange"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Wishlist">
-                                                    <a href="wishlist.html" class="notifi-wishlist">
-                                                        <i class="ijaboIcon sx-1 dw dw-heart"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="product-detail">
-                                            <a href="product-detail.html">
-                                                <h6 class="name h-100">Condimentum
-                                                    magna sociis lacinia
-                                                    quisque
-                                                    porta eros
-                                                    nulla</h6>
-                                            </a>
-
-                                            <h5 class="sold text-content">
-                                                <span class="theme-color price">$33.19</span>
-                                                <del>46.66</del>
-                                            </h5>
-
-                                            <div class="product-rating mt-2">
-                                                <ul class="rating">
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star no-rating-color"></i>
-                                                    </li>
-                                                </ul>
-
-                                                <h6 class="theme-color">In
-                                                    Stock</h6>
-                                            </div>
-
-                                            <div class="add-to-cart-box mt-2">
-                                                <a href="cart.html"
-                                                    class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
-                                                        class="icon-copy bi bi-cart-plus-fill"></i>
-                                                    Add To
-                                                    Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="row m-0">
-                                <div class="col-12 px-0">
-                                    <div class="product-box">
-                                        <div class="product-image">
-                                            <a href="product-detail.html">
-                                                <img src="/front/images/product img place holder 1.png"
-                                                    class="img-fluid   lazyload" alt>
-                                            </a>
-                                            <ul class="product-option">
-                                                <li title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
-                                                        <i class="ijaboIcon sx-1 dw dw-eye"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Compare">
-                                                    <a href="compare.html">
-                                                        <i class="icon-copy dw dw-exchange"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Wishlist">
-                                                    <a href="wishlist.html" class="notifi-wishlist">
-                                                        <i class="ijaboIcon sx-1 dw dw-heart"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="product-detail">
-                                            <a href="product-detail.html">
-                                                <h6 class="name h-100">Fusce
-                                                    natoque scelerisque
-                                                    luctus arcu
-                                                    lobortis ultricies
-                                                    ullamcorper</h6>
-                                            </a>
-
-                                            <h5 class="sold text-content">
-                                                <span class="theme-color price">$26.69</span>
-                                                <del>28.56</del>
-                                            </h5>
-
-                                            <div class="product-rating mt-2">
-                                                <ul class="rating">
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star no-rating-color"></i>
-                                                    </li>
-                                                </ul>
-
-                                                <h6 class="theme-color">In
-                                                    Stock</h6>
-                                            </div>
-
-                                            <div class="add-to-cart-box mt-2">
-                                                <a href="cart.html"
-                                                    class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
-                                                        class="icon-copy bi bi-cart-plus-fill"></i>
-                                                    Add To
-                                                    Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="row m-0">
-                                <div class="col-12 px-0">
-                                    <div class="product-box">
-                                        <div class="product-image">
-                                            <a href="product-detail.html">
-                                                <img src="/front/images/product img place holder 1.png"
-                                                    class="img-fluid   lazyload" alt>
-                                            </a>
-                                            <ul class="product-option">
-                                                <li title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
-                                                        <i class="ijaboIcon sx-1 dw dw-eye"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Compare">
-                                                    <a href="compare.html">
-                                                        <i class="icon-copy dw dw-exchange"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Wishlist">
-                                                    <a href="wishlist.html" class="notifi-wishlist">
-                                                        <i class="ijaboIcon sx-1 dw dw-heart"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="product-detail">
-                                            <a href="product-detail.html">
-                                                <h6 class="name h-100">Inceptos
-                                                    urna maecenas tempus
-                                                    praesent tempor
-                                                    porta tellus dui
-                                                    fermentum</h6>
-                                            </a>
-
-                                            <h5 class="sold text-content">
-                                                <span class="theme-color price">$116.69</span>
-                                                <del>228.56</del>
-                                            </h5>
-
-                                            <div class="product-rating mt-2">
-                                                <ul class="rating">
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star no-rating-color"></i>
-                                                    </li>
-                                                </ul>
-
-                                                <h6 class="theme-color">In
-                                                    Stock</h6>
-                                            </div>
-
-                                            <div class="add-to-cart-box mt-2">
-                                                <a href="cart.html"
-                                                    class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
-                                                        class="icon-copy bi bi-cart-plus-fill"></i>
-                                                    Add To
-                                                    Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="row m-0">
-                                <div class="col-12 px-0">
-                                    <div class="product-box">
-                                        <div class="product-image">
-                                            <a href="product-detail.html">
-                                                <img src="/front/images/product img place holder 1.png"
-                                                    class="img-fluid   lazyload" alt>
-                                            </a>
-                                            <ul class="product-option">
-                                                <li title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
-                                                        <i class="ijaboIcon sx-1 dw dw-eye"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Compare">
-                                                    <a href="compare.html">
-                                                        <i class="icon-copy dw dw-exchange"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Wishlist">
-                                                    <a href="wishlist.html" class="notifi-wishlist">
-                                                        <i class="ijaboIcon sx-1 dw dw-heart"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="product-detail">
-                                            <a href="product-detail.html">
-                                                <h6 class="name h-100">Nullam
-                                                    tincidunt vitae per
-                                                    malesuada dapibus
-                                                    hendrerit odio.</h6>
-                                            </a>
-
-                                            <h5 class="sold text-content">
-                                                <span class="theme-color price">$76.79</span>
-                                                <del>87.56</del>
-                                            </h5>
-
-                                            <div class="product-rating mt-2">
-                                                <ul class="rating">
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star no-rating-color"></i>
-                                                    </li>
-                                                </ul>
-
-                                                <h6 class="theme-color">In
-                                                    Stock</h6>
-                                            </div>
-
-                                            <div class="add-to-cart-box mt-2">
-                                                <a href="cart.html"
-                                                    class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
-                                                        class="icon-copy bi bi-cart-plus-fill"></i>
-                                                    Add To
-                                                    Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="row m-0">
-                                <div class="col-12 px-0">
-                                    <div class="product-box">
-                                        <div class="product-image">
-                                            <a href="product-detail.html">
-                                                <img src="/front/images/product img place holder 1.png"
-                                                    class="img-fluid   lazyload" alt>
-                                            </a>
-                                            <ul class="product-option">
-                                                <li title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
-                                                        <i class="ijaboIcon sx-1 dw dw-eye"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Compare">
-                                                    <a href="compare.html">
-                                                        <i class="icon-copy dw dw-exchange"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Wishlist">
-                                                    <a href="wishlist.html" class="notifi-wishlist">
-                                                        <i class="ijaboIcon sx-1 dw dw-heart"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="product-detail">
-                                            <a href="product-detail.html">
-                                                <h6 class="name h-100">Nibh
-                                                    pretium fringilla
-                                                    vulputate gravida
-                                                    dictumst mi</h6>
-                                            </a>
-
-                                            <h5 class="sold text-content">
-                                                <span class="theme-color price">$36.69</span>
-                                                <del>68.56</del>
-                                            </h5>
-
-                                            <div class="product-rating mt-2">
-                                                <ul class="rating">
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star no-rating-color"></i>
-                                                    </li>
-                                                </ul>
-
-                                                <h6 class="theme-color">In
-                                                    Stock</h6>
-                                            </div>
-
-                                            <div class="add-to-cart-box mt-2">
-                                                <a href="cart.html"
-                                                    class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
-                                                        class="icon-copy bi bi-cart-plus-fill"></i>
-                                                    Add To
-                                                    Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="row m-0">
-                                <div class="col-12 px-0">
-                                    <div class="product-box">
-                                        <div class="product-image">
-                                            <a href="product-detail.html">
-                                                <img src="/front/images/product img place holder 1.png"
-                                                    class="img-fluid   lazyload" alt>
-                                            </a>
-                                            <ul class="product-option">
-                                                <li title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
-                                                        <i class="ijaboIcon sx-1 dw dw-eye"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Compare">
-                                                    <a href="compare.html">
-                                                        <i class="icon-copy dw dw-exchange"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li title="Wishlist">
-                                                    <a href="wishlist.html" class="notifi-wishlist">
-                                                        <i class="ijaboIcon sx-1 dw dw-heart"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="product-detail">
-                                            <a href="product-detail.html">
-                                                <h6 class="name h-100">Quam
-                                                    mus habitant congue
-                                                    rhoncus tristique
-                                                </h6>
-                                            </a>
-
-                                            <h5 class="sold text-content">
-                                                <span class="theme-color price">$26.69</span>
-                                                <del>28.56</del>
-                                            </h5>
-
-                                            <div class="product-rating mt-2">
-                                                <ul class="rating">
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star rating-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-star no-rating-color"></i>
-                                                    </li>
-                                                </ul>
-
-                                                <h6 class="theme-color">In
-                                                    Stock</h6>
-                                            </div>
-
-                                            <div class="add-to-cart-box mt-2">
-                                                <a href="cart.html"
-                                                    class="btn btn-md bg-dark cart-button text-white w-100 btn-bg-color"><i
-                                                        class="icon-copy bi bi-cart-plus-fill"></i>
-                                                    Add To
-                                                    Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="section-t-space">
                     <div class="banner-contain hover-effect">
                         <img src="/front/images/b.png" class="bg-img   lazyload" alt>
@@ -778,14 +314,10 @@
                                 <h2 class="banner-title">ELECTRONICS</h2>
                                 <h5 class="lh-sm mx-auto mt-1 text-content">SALE
                                     8% OFF</h5>
-                                <button onclick="location.href = 'javascript:void(0)';"
-                                    class="btn btn-animation btn-sm mx-auto mt-sm-3 mt-2">Shop
-                                    Now <i class="fa fa-arrow-right icon"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="title section-t-space">
                     <h2>Latest on Blog</h2>
                     <p>Quam mus habitant congue rhoncus tristique, neque
@@ -794,7 +326,6 @@
                         congue proin aenean mattis sed sociis fames
                         mauris arcu enim</p>
                 </div>
-
                 <div class="slider-3-blog ratio_65 no-arrow product-wrapper mb-4">
                     <div>
                         <div class="blog-box">
@@ -1078,7 +609,10 @@
     updateCarousel();
 });
 
-
+$('#carouselExampleIndicators').carousel({
+    interval: 3000,
+    pause: 'hover'
+});
 </script>
 
 @endsection
