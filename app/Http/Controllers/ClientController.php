@@ -138,7 +138,7 @@ class ClientController extends Controller
         ->inRandomOrder()
         ->take(9)
         ->get();
-        
+
         $newestProducts = Product::where('visibility', 1)->orderBy('created_at', 'desc')->take(7)->get(); // Lấy 7 sản phẩm mới nhất
         $cartItemCount = 0;
         if (auth('client')->check()) {
@@ -568,5 +568,71 @@ public function resetPasswordHandler(Request $request) {
 }
 
 
+// public function updatePassword(Request $request)
+// {
+//     $client = Client::findOrFail(auth('client')->id());
+
+//     // Validate form inputs
+//     $request->validate([
+//         'current_password' => [
+//             'required',
+//             function ($attribute, $value, $fail) use ($client) {
+//                 if (!Hash::check($value, $client->password)) {
+//                     return $fail(__('The current password is incorrect.'));
+//                 }
+//             },
+//         ],
+//         'new_password' => 'required|min:5|max:45|confirmed',
+//     ]);
+
+//     // Update password
+//     $client->update([
+//         'password' => Hash::make($request->new_password),
+//     ]);
+
+//     return redirect()->back()->with('success', 'Password updated successfully.');
+// }
+
+public function updatePassword(Request $request)
+{
+    $client = Client::findOrFail(auth('client')->id());
+
+    // Validate form inputs
+    $request->validate([
+        'current_password' => [
+            'required',
+            function ($attribute, $value, $fail) use ($client) {
+                if (!Hash::check($value, $client->password)) {
+                    return $fail(__('The current password is incorrect.'));
+                }
+            },
+        ],
+        'new_password' => 'required|min:5|max:45|confirmed',
+    ]);
+
+    // Update password
+    $client->update([
+        'password' => Hash::make($request->new_password),
+    ]);
+
+    $data['client'] = $client;
+    $data['new_password'] = $request->new_password;
+
+    $mailBody = view('email-templates.client-reset-email-template', $data)->render();
+
+    $mailConfig = [
+        'mail_from_email' => env('MAIL_FROM_ADDRESS', 'no-reply@example.com'),
+        'mail_from_name' => env('MAIL_FROM_NAME', 'Your Website'),
+        'mail_recipient_email' => $client->email,
+        'mail_recipient_name' => $client->name,
+        'mail_subject' => 'Password Changed Notification',
+        'mail_body' => $mailBody
+    ];
+
+    // Sử dụng hàm gửi email
+    sendEmail($mailConfig);
+
+    return redirect()->back()->with('success', 'Password updated successfully and email notification sent.');
+}
 
 }

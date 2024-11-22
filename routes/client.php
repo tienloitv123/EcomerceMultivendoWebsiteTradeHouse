@@ -38,6 +38,7 @@ Route::prefix('client')->name('client.')->group(function() {
             Route::post('/order/create', [ClientController::class, 'createOrder'])->name('order.create');
             Route::get('/orders/manage', [ClientController::class, 'manageOrders'])->name('orders.manage');
             Route::post('/orders/{orderId}/update', [ClientController::class, 'updateOrderStatus'])->name('orders.update');
+            Route::post('/client/update-password', [ClientController::class, 'updatePassword'])->name('update-password');
         });
     });
 });

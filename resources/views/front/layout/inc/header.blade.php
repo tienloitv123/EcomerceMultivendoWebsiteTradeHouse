@@ -15,14 +15,12 @@
                             <img src="/images/site/{{ get_settings()->site_logo }}" class="img-fluid blur-up lazyload" alt>
                         </a>
                         <div class="middle-box">
-                            <div class="search-box">
+                            <div class="custom-search-box">
                                 <form action="{{ route('product.search') }}" method="GET">
-                                    <div class="input-group">
-                                        <input type="search" name="query" class="form-control" placeholder="What are you looking for?" aria-describedby="button-addon2" required>
-                                        <button class="btn" type="submit" id="button-addon2">
-                                            <i class="icon-copy dw dw-search2"></i>
-                                        </button>
-                                    </div>
+                                    <input type="search" name="query" placeholder="What are you looking for?" required>
+                                    <button type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -75,20 +73,25 @@
                                 </li>
 
                                 <li class="right-side onhover-dropdown">
-                                    <div class="delivery-login-box">
+                                    <div class="delivery-login-box d-flex align-items-center">
                                         <div class="delivery-icon">
-                                            <i class="ijaboIcon icon-copy dw dw-user-1"></i>
-                                        </div>
-                                        <div class="delivery-detail">
                                             @if(auth('client')->check())
-                                                <h6>Hello</h6>
-                                                <h5> {{ auth('client')->user()->name }}</h5>
+                                                <img src="{{ asset('images/users/clients/' . auth('client')->user()->picture) }}" alt="Profile Picture"
+                                                     class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
                                             @else
-                                                <h6>Hello,</h6>
-                                                <h5>My Account</h5>
+                                            <img src="images\users\default-avatar.png" alt="Profile Picture"
+                                                     class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                            @endif
+                                        </div>
+                                        <div class="delivery-detail ms-2">
+                                            @if(auth('client')->check())
+                                                <h5 class="mb-0">{{ auth('client')->user()->name }}</h5>
+                                            @else
+                                                <h5 class="mb-0">My Account</h5>
                                             @endif
                                         </div>
                                     </div>
+
                                     <div class="onhover-div onhover-div-login">
                                         <ul class="user-box-name">
                                             @if(auth('client')->check())
@@ -110,16 +113,13 @@
                                                 </li>
                                             @else
                                                 <li class="product-box-contain">
-                                                    <a href="{{ route('client.login') }}"><i class="icon-copy dw dw-login"></i> Client Log In</a>
-                                                </li>
-                                                <li class="product-box-contain">
-                                                    <a href="{{ route('client.register') }}"><i class="icon-copy dw dw-user-2"></i> Client Register</a>
+                                                    <a href="{{ route('client.login') }}"><i class="icon-copy dw dw-login"></i>Login</a>
                                                 </li>
                                                 <li class="product-box-contain">
                                                     <a href="{{ route('admin.login') }}"><i class="icon-copy dw dw-login"></i> Admin Login</a>
                                                 </li>
                                                 <li class="product-box-contain">
-                                                    <a href="{{ route('seller.login') }}"><i class="icon-copy dw dw-login"></i> Seller Log In</a>
+                                                    <a href="{{ route('seller.login') }}"><i class="icon-copy dw dw-login"></i> Login as a seller</a>
                                                 </li>
                                             @endif
                                         </ul>
@@ -243,5 +243,40 @@
             background-color: #f1f1f1; /* light gray background */
             border-bottom: 2px solid #000; /* black border at bottom */
         }
+
+        .custom-search-box {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .custom-search-box input[type="search"] {
+        width: 100%;
+        padding: 10px 40px 10px 15px;
+        border: 2px solid #000; /* Viền đen đậm */
+        border-radius: 25px; /* Bo tròn góc */
+        font-size: 16px;
+        outline: none;
+    }
+
+    .custom-search-box input[type="search"]:focus {
+        border-color: #007bff; /* Màu viền khi focus */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .custom-search-box button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .custom-search-box button i {
+        font-size: 20px;
+        color: #000; /* Màu icon */
+    }
     </style>
 </header>

@@ -320,11 +320,7 @@
                 </div>
                 <div class="title section-t-space">
                     <h2>Latest on Blog</h2>
-                    <p>Quam mus habitant congue rhoncus tristique, neque
-                        cum magnis eros pretium per, inceptos eget
-                        integer netus. Ante vehicula euismod etiam at
-                        congue proin aenean mattis sed sociis fames
-                        mauris arcu enim</p>
+                    <p>This will be update in the next plan</p>
                 </div>
                 <div class="slider-3-blog ratio_65 no-arrow product-wrapper mb-4">
                     <div>
@@ -401,7 +397,6 @@
         </div>
     </div>
 </section>
-<!-- Product Section End -->
 <style>
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');

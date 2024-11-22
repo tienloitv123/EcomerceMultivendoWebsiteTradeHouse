@@ -13,7 +13,7 @@ Dear <b>{{ $seller->name }}</b><br>
     If you are having trouble with the link above, copy and paste it into your web browser.
 </p>
 <p>
-    NB: IF YOU DID NOT REQUEST A PASSWORD REST, PLEASE IGNORE THIS EMAIL
+    Noicte: IF YOU DID NOT REQUEST A PASSWORD REST, PLEASE IGNORE THIS EMAIL
 </p><br>
 ----------------------------------------------
 <p>
