@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\CartDetail;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Rules\ValidatePrice;
@@ -116,78 +118,79 @@ class ProductController extends Controller
          return view('back.page.seller.edit-product',$data);
      }
 
-     public function updateProduct(Request $request){
-        $product = Product::findOrFail($request->product_id);
-        $product_image = $product->product_image;
+     public function updateProduct(Request $request)
+     {
+         $product = Product::findOrFail($request->product_id);
+         $existingImage = $product->product_image;
 
-         $request->validate([
-            'name'=>'required|unique:products,name,'.$product->id,
-            'summary'=>'required|min:20',
-            'product_image'=>'nullable|mimes:png,jpg,jpeg|max:1024',
-            'subcategory'=>'required|exists:sub_categories,id',
-            'price'=>['required', new ValidatePrice],
-            'compare_price'=>['nullable', new ValidatePrice],
-         ],[
-            'name.required'=>'Enter product name',
-            'name.unique'=>'This product name is already taken',
-            'summary.required'=>'Write product summary',
-            'subcategory.required'=>'Select product sub category',
-            'price.required'=>'Enter product price'
+         $validatedData = $request->validate([
+             'name' => 'required|unique:products,name,' . $product->id,
+             'summary' => 'required|min:20',
+             'product_image' => 'nullable|mimes:png,jpg,jpeg|max:1024',
+             'subcategory' => 'required|exists:sub_categories,id',
+             'price' => ['required', new ValidatePrice],
+             'compare_price' => ['nullable', new ValidatePrice],
+         ], [
+             'name.required' => 'Enter product name',
+             'name.unique' => 'This product name is already taken',
+             'summary.required' => 'Write product summary',
+             'subcategory.required' => 'Select product subcategory',
+             'price.required' => 'Enter product price',
          ]);
 
-         //Upload product image
-         if( $request->hasFile('product_image') ){
-            $path = 'images/products/';
-            $file = $request->file('product_image');
-            $filename = 'PIMG_'.time().uniqid().'.'.$file->getClientOriginalExtension();
-            $old_product_image = $product->product_image;
+         if ($request->hasFile('product_image')) {
+             $uploadDirectory = 'images/products/';
+             $uploadedFile = $request->file('product_image');
+             $newFileName = 'PIMG_' . time() . uniqid() . '.' . $uploadedFile->getClientOriginalExtension();
 
-            $upload = $file->move(public_path($path),$filename);
-            if( $upload ){
-                //Delete old product image
-                if( File::exists(public_path($path.$old_product_image)) ){
-                    File::delete(public_path($path.$old_product_image));
-                }
+             if (!empty($existingImage) && File::exists(public_path($uploadDirectory . $existingImage))) {
+                 File::delete(public_path($uploadDirectory . $existingImage));
+             }
 
-                $product_image = $filename;
-            }
+             $uploadedFile->move(public_path($uploadDirectory), $newFileName);
+             $existingImage = $newFileName;
          }
 
-         //UPDATE PRODUCT
-         $product->name = $request->name;
-         $product->slug = null;
-         $product->summary = $request->summary;
-         $product->category = $request->category;
-         $product->subcategory = $request->subcategory;
-         $product->price = $request->price;
-         $product->compare_price = $request->compare_price;
-         $product->visibility = $request->visibility;
-         $product->product_image = $product_image;
-         $updated = $product->save();
+         $product->fill([
+             'name' => $validatedData['name'],
+             'slug' => null,
+             'summary' => $validatedData['summary'],
+             'category' => $request->category,
+             'subcategory' => $validatedData['subcategory'],
+             'price' => $validatedData['price'],
+             'compare_price' => $validatedData['compare_price'],
+             'visibility' => $request->visibility,
+             'product_image' => $existingImage,
+         ]);
 
-         if( $updated ){
-            return response()->json(['status'=>1,'msg'=>'Product has been successfully updated.']);
-         }else{
-            return response()->json(['status'=>0,'msg'=>'Something went wrong.']);
+         if ($product->save()) {
+             return response()->json(['status' => 1, 'msg' => 'Product has been successfully updated.']);
          }
+
+         return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
+     }
+
+ public function deleteProduct(Request $request)
+{
+    $product = Product::findOrFail($request->product_id);
+
+    $path = 'images/products/';
+    $product_image = $product->product_image;
+
+    if ($product_image != null && File::exists(public_path($path . $product_image))) {
+        File::delete(public_path($path . $product_image));
     }
-    public function deleteProduct(Request $request){
-        $product = Product::findOrFail($request->product_id);
+    CartDetail::where('product_id', $product->id)->delete();
+    OrderDetail::where('product_id', $product->id)->delete();
+    $delete = $product->delete();
 
-        $path = 'images/products/';
-        $product_image = $product->product_image;
-        if ($product_image != null && File::exists(public_path($path . $product_image))) {
-            File::delete(public_path($path . $product_image));
-        }
-
-        $delete = $product->delete();
-
-        if ($delete) {
-            return response()->json(['status' => 1, 'msg' => 'Product has been successfully deleted.']);
-        } else {
-            return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
-        }
+    if ($delete) {
+        return response()->json(['status' => 1, 'msg' => 'Product and related data have been successfully deleted.']);
+    } else {
+        return response()->json(['status' => 0, 'msg' => 'Something went wrong.']);
     }
+}
+
     public function show($id)
     {
         // $product = Product::findOrFail($id);
@@ -222,6 +225,8 @@ class ProductController extends Controller
     {
         return $this->hasMany(SubCategory::class, 'is_child_of', 'id');
     }
+
+    
     public function filter(Request $request)
     {
         $query = Product::query();

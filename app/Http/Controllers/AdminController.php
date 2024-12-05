@@ -23,32 +23,26 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Tổng doanh thu
         $dailyRevenue = Order::whereDate('created_at', now())->sum('total_amount');
         $monthlyRevenue = Order::whereMonth('created_at', now()->month)->sum('total_amount');
         $yearlyRevenue = Order::whereYear('created_at', now()->year)->sum('total_amount');
         $totalRevenue = $yearlyRevenue;
-        // Số lượng người dùng
         $totalClients = Client::count();
         $totalSellers = Seller::count();
         $totalUsers = $totalClients + $totalSellers;
 
-        // Số lượng sản phẩm
         $activeProducts = Product::where('visibility', '1')->count();
 
-        // Thống kê đơn hàng
         $totalOrders = Order::count();
         $completedOrders = Order::where('status', 'completed')->count();
         $processingOrders = Order::where('status', 'pending')->count();
         $canceledOrders = Order::where('status', 'rejected')->count();
 
-        // Doanh thu theo thời gian (Line Chart)
         $revenueByDate = Order::selectRaw('DATE(created_at) as date, SUM(total_amount) as revenue')
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get();
 
-        // Doanh thu theo danh mục (Bar Chart)
         $revenueByCategory = OrderDetail::join('products', 'order_details.product_id', '=', 'products.id')
             ->join('categories', 'products.category', '=', 'categories.id')
             ->select('categories.category_name', DB::raw('SUM(order_details.total) as revenue'))
@@ -56,14 +50,12 @@ class AdminController extends Controller
             ->orderBy('revenue', 'desc')
             ->get();
 
-        // Phân tích đơn hàng (Pie Chart)
         $orderStats = [
             'completed' => $completedOrders,
             'processing' => $processingOrders,
             'canceled' => $canceledOrders,
         ];
 
-        // Tăng trưởng người dùng (Line Chart)
         $userGrowth = Client::selectRaw('DATE(created_at) as date, COUNT(*) as total_clients')
             ->groupBy('date')
             ->orderBy('date', 'asc')
@@ -74,7 +66,6 @@ class AdminController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-        // Logs và thông báo
         $recentOrders = Order::latest()->take(10)->get();
         $recentUsers = Client::latest()->take(5)->get()->merge(Seller::latest()->take(5)->get());
 

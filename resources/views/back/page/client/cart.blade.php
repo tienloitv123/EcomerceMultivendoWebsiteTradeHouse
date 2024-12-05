@@ -59,10 +59,13 @@
             </div>
         @endforeach
     @else
+    <div class="container-sm min-vh-50 d-flex flex-column justify-content-center">
         <div class="text-center my-5">
             <h4>Your cart is empty.</h4>
             <p><a href="{{ route('home') }}" class="btn btn-primary">Continue Shopping</a></p>
         </div>
+    </div>
+
     @endif
     </div>
 </div>

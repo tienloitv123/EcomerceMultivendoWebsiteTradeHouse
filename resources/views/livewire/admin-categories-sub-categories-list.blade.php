@@ -12,9 +12,7 @@
                             Add Category
                         </a>
                     </div>
-
                 </div>
-
                 <div class="table-responsive mt-4">
                     <table class="table table-borderless table-stiped">
                         <thead>

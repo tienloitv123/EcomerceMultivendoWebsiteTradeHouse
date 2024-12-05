@@ -136,10 +136,10 @@ class ClientController extends Controller
     {
         $featuredProducts = Product::where('visibility', 1)
         ->inRandomOrder()
-        ->take(9)
+        ->take(12)
         ->get();
 
-        $newestProducts = Product::where('visibility', 1)->orderBy('created_at', 'desc')->take(7)->get(); // Lấy 7 sản phẩm mới nhất
+        $newestProducts = Product::where('visibility', 1)->orderBy('created_at', 'desc')->take(9)->get();
         $cartItemCount = 0;
         if (auth('client')->check()) {
             $cart = Cart::where('client_id', auth('client')->id())->first();

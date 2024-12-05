@@ -2,29 +2,18 @@
 <html>
 
 <head>
-    <!-- Basic Page Info -->
     <meta charset="utf-8" />
     <title>@yield('pageTitle')</title>
-
-    <!-- Site favicon -->
-    {{-- <link rel="apple-touch-icon" sizes="180x180" href="/back/vendors/images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/back/vendors/images/favicon-32x32.png" /> --}}
     <link rel="icon" type="image/png" sizes="16x16" href="/images/site/{{ get_settings()->site_favicon }}" />
-
-    <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
-        <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.min.css">
-        <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.structure.min.css">
-        <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.theme.min.css">
-    <!-- CSS -->
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.13.2/jquery-ui.theme.min.css">
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/core.css" />
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/icon-font.min.css" />
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/style.css" />
-
 
     <script>
         (function(w, d, s, l, i) {
@@ -40,6 +29,12 @@
             j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, "script", "dataLayer", "GTM-NXZMQSS");
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.left-side-bar');
+            sidebar.style.backgroundColor = '#87CEFA'; 
+            sidebar.style.color = 'white';
+        });
     </script>
     <!-- End Google Tag Manager -->
     <link rel="stylesheet" href="/extra-assets/ijabo/ijabo.min.css">
@@ -50,10 +45,10 @@
     <link rel="stylesheet" href="/extra-assets/summernote/summernote-bs4.min.css">
 
     <style>
-		.swal2-popup{
-			font-size: 0.78em;
-		}
-	   </style>
+        .swal2-popup {
+            font-size: 0.78em;
+        }
+    </style>
     @livewireStyles
     @stack('stylesheets')
 </head>
@@ -65,138 +60,20 @@
         <div class="header-left">
             <div class="menu-icon bi bi-list"></div>
             <div class="search-toggle-icon bi bi-search" data-toggle="header_search"></div>
-            <div class="header-search">
-                <form>
-                    <div class="form-group mb-0">
-                        <i class="dw dw-search2 search-icon"></i>
-                        <input type="text" class="form-control search-input" placeholder="Search Here" />
-                        <div class="dropdown">
-                            <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-                                <i class="ion-arrow-down-c"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class="form-group row">
-                                    <label class="col-sm-12 col-md-2 col-form-label">From</label>
-                                    <div class="col-sm-12 col-md-10">
-                                        <input class="form-control form-control-sm form-control-line" type="text" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-12 col-md-2 col-form-label">To</label>
-                                    <div class="col-sm-12 col-md-10">
-                                        <input class="form-control form-control-sm form-control-line" type="text" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-                                    <div class="col-sm-12 col-md-10">
-                                        <input class="form-control form-control-sm form-control-line" type="text" />
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <button class="btn btn-primary">Search</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
         </div>
         <div class="header-right">
-            <div class="dashboard-setting user-notification">
+            {{-- <div class="dashboard-setting user-notification">
                 <div class="dropdown">
                     <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
                         <i class="dw dw-settings2"></i>
                     </a>
                 </div>
-            </div>
-            <div class="user-notification">
-                <div class="dropdown">
-                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-                        <i class="icon-copy dw dw-notification"></i>
-                        <span class="badge notification-active"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="notification-list mx-h-350 customscroll">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <img src="/back/vendors/images/img.jpg" alt="" />
-                                        <h3>John Doe</h3>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed...
-                                        </p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/back/vendors/images/photo1.jpg" alt="" />
-                                        <h3>Lea R. Frith</h3>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed...
-                                        </p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/back/vendors/images/photo2.jpg" alt="" />
-                                        <h3>Erik L. Richards</h3>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed...
-                                        </p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/back/vendors/images/photo3.jpg" alt="" />
-                                        <h3>John Doe</h3>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed...
-                                        </p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/back/vendors/images/photo4.jpg" alt="" />
-                                        <h3>Renee I. Hansen</h3>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed...
-                                        </p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/back/vendors/images/img.jpg" alt="" />
-                                        <h3>Vicki M. Coleman</h3>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed...
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
+            </div> --}}
             @livewire('admin-seller-header-profile-info')
-
-
-            <div class="github-link">
-                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="/back/vendors/images/github.svg"
-                        alt="" /></a>
-            </div>
         </div>
     </div>
 
-    <div class="right-sidebar">
+    {{-- <div class="right-sidebar">
         <div class="sidebar-title">
             <h3 class="weight-600 font-16 text-blue">
                 Layout Settings
@@ -223,20 +100,18 @@
                 <h4 class="weight-600 font-18 pb-10">Menu Dropdown Icon</h4>
                 <div class="sidebar-radio-group pb-10 mb-10">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="sidebaricon-1" name="menu-dropdown-icon"
-                            class="custom-control-input" value="icon-style-1" checked="" />
-                        <label class="custom-control-label" for="sidebaricon-1"><i
-                                class="fa fa-angle-down"></i></label>
+                        <input type="radio" id="sidebaricon-1" name="menu-dropdown-icon" class="custom-control-input"
+                            value="icon-style-1" checked="" />
+                        <label class="custom-control-label" for="sidebaricon-1"><i class="fa fa-angle-down"></i></label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="sidebaricon-2" name="menu-dropdown-icon"
-                            class="custom-control-input" value="icon-style-2" />
-                        <label class="custom-control-label" for="sidebaricon-2"><i
-                                class="ion-plus-round"></i></label>
+                        <input type="radio" id="sidebaricon-2" name="menu-dropdown-icon" class="custom-control-input"
+                            value="icon-style-2" />
+                        <label class="custom-control-label" for="sidebaricon-2"><i class="ion-plus-round"></i></label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="sidebaricon-3" name="menu-dropdown-icon"
-                            class="custom-control-input" value="icon-style-3" />
+                        <input type="radio" id="sidebaricon-3" name="menu-dropdown-icon" class="custom-control-input"
+                            value="icon-style-3" />
                         <label class="custom-control-label" for="sidebaricon-3"><i
                                 class="fa fa-angle-double-right"></i></label>
                     </div>
@@ -289,7 +164,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="left-side-bar">
         <div class="brand-logo">
@@ -327,7 +202,7 @@
                         </li>
                         <li class="dropdown">
                             <a href="javascript:;" class="dropdown-toggle">
-                               <span class="micon bi bi-people-fill"></span><span class="mtext">User Manage</span>
+                                <span class="micon bi bi-people-fill"></span><span class="mtext">User Manage</span>
                             </a>
                             <ul class="submenu">
                                 <li>
@@ -356,7 +231,8 @@
                         </li>
                     @else()
                         <li>
-                            <a href="{{ route('seller.home')}}" class="dropdown-toggle no-arrow {{ Route::is('seller.home') ? 'active' : '' }}">
+                            <a href="{{ route('seller.home') }}"
+                                class="dropdown-toggle no-arrow {{ Route::is('seller.home') ? 'active' : '' }}">
                                 <span class="micon fa fa-home"></span><span class="mtext">Home</span>
                             </a>
                         </li>
@@ -367,14 +243,19 @@
                             </a>
                         </li>
                         <li class="dropdown">
-							<a href="javascript:;" class="dropdown-toggle {{ Route::is('seller.product.*') ? 'active' : '' }}">
-								<span class="micon bi bi-bag"></span><span class="mtext">Manage Products</span>
-							</a>
-							<ul class="submenu">
-								<li><a href="{{ route('seller.product.all-products') }}" class="{{ Route::is('seller.product.all-products') ? 'active' : '' }}">All Products</a></li>
-								<li><a href="{{ route('seller.product.add-product') }}" class="{{ Route::is('seller.product.add-product') ? 'active' : '' }}">Add Product</a></li>
-							</ul>
-						</li>
+                            <a href="javascript:;"
+                                class="dropdown-toggle {{ Route::is('seller.product.*') ? 'active' : '' }}">
+                                <span class="micon bi bi-bag"></span><span class="mtext">Manage Products</span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="{{ route('seller.product.all-products') }}"
+                                        class="{{ Route::is('seller.product.all-products') ? 'active' : '' }}">All
+                                        Products</a></li>
+                                <li><a href="{{ route('seller.product.add-product') }}"
+                                        class="{{ Route::is('seller.product.add-product') ? 'active' : '' }}">Add
+                                        Product</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <div class="dropdown-divider"></div>
                         </li>
@@ -383,22 +264,21 @@
                         </li>
 
                         <li>
-                            <a href="{{route('seller.profile')}}"  class="dropdown-toggle no-arrow"
-                            class="dropdown-toggle no-arrow {{ Route::is('seller.profile') ? 'active' : '' }}"
-                            >
+                            <a href="{{ route('seller.profile') }}" class="dropdown-toggle no-arrow"
+                                class="dropdown-toggle no-arrow {{ Route::is('seller.profile') ? 'active' : '' }}">
                                 <span class="micon fa fa-user"></span>
                                 <span class="mtext">Profile</span>
                             </a>
 
                         </li>
                         <li>
-							<a href="{{ route('seller.shop-settings') }}" class="dropdown-toggle no-arrow {{ Route::is('seller.shop-settings') ? 'active' : '' }}">
-								<span class="micon bi bi-shop"></span>
-								<span class="mtext"
-									>Shop Settigs
-									</span>
-							</a>
-						</li>
+                            <a href="{{ route('seller.shop-settings') }}"
+                                class="dropdown-toggle no-arrow {{ Route::is('seller.shop-settings') ? 'active' : '' }}">
+                                <span class="micon bi bi-shop"></span>
+                                <span class="mtext">Shop Settigs
+                                </span>
+                            </a>
+                        </li>
                     @endif
 
                 </ul>
@@ -451,8 +331,9 @@
                 </div>
             </div>
             <div class="footer-wrap pd-20 mb-20 card-box">
-               Trade House friendly with everyone!!!!
-                <a href="https://github.com/tienloitv123/EcomerceMultivendoWebsiteTradeHouse" target="_blank">Github by Loiltgcc210019</a>
+                Trade House friendly with everyone!!!!
+                <a href="https://github.com/tienloitv123/EcomerceMultivendoWebsiteTradeHouse" target="_blank">Github
+                    by Loiltgcc210019</a>
             </div>
         </div>
     </div>
@@ -475,14 +356,14 @@
     <script src="/extra-assets/ijabo/jquery.ijaboViewer.min.js"></script>
     <script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
     <script src="/extra-assets/jquery-ui-1.13.2/jquery-ui.min.js"></script>
-	<script src="/extra-assets/summernote/summernote-bs4.min.js"></script>
-		<script>
-			$(document).ready(function(){
-                $('.summernote').summernote({
-					height:200
-				});
-			});
-		</script>
+    <script src="/extra-assets/summernote/summernote-bs4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.summernote').summernote({
+                height: 200
+            });
+        });
+    </script>
 
     <script>
         window.addEventListener('showToastr', function(event) {
@@ -504,5 +385,8 @@
     @stack('scripts')
 
 </body>
+<style>
+
+</style>
 
 </html>

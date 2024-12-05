@@ -5,19 +5,6 @@
 		<!-- Basic Page Info -->
 		<meta charset="utf-8" />
 		<title>@yield('pageTitle')</title>
-
-		<!-- Site favicon -->
-		{{-- <link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="/back/vendors/images/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="/back/vendors/images/favicon-32x32.png"
-		/> --}}
         <link rel="icon" type="image/png" sizes="16x16" href="/images/site/{{ get_settings()->site_favicon}}" />
 
 
@@ -60,9 +47,9 @@
 						@if ( !Route::is('admin.*') )
 
                         @if ( Route::is('seller.login') )
-                        <li><a href="#">Register</a></li>
-                   @else
                         <li><a href="#">Login</a></li>
+                   @else
+                        <li><a href="#">Register </a></li>
                    @endif
 
 
@@ -76,7 +63,7 @@
 			<div class="container">
 				<div class="row align-items-center">
 					<div class="col-md-6 col-lg-7">
-						<img src="/back/vendors/images/login-page-img.png" alt="" />
+						<img src="/back/vendors/images/TRade.png" alt="" />
 					</div>
 					<div class="col-md-6 col-lg-5">
 						@yield('content')

@@ -6,23 +6,30 @@
     <!-- Product Detail Section -->
     <div class="product-detail-wrap mb-30">
         <div class="row no-gutters">
+            <!-- Box chứa ảnh -->
             <div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-center">
-                <div class="product-slide" style="padding: 10px; background-color: #ffffff; border: 2px solid #e0e0e0;">
-                    <img src="/images/products/{{ $product->product_image }}" alt="{{ $product->name }}" class="img-fluid"
-                        style="max-width: 100%; height: 600px; object-fit: contain;" />
+                <div class="product-slide"
+                     style="padding: 10px; background-color: #ffffff; border: 2px solid #e0e0e0; width: 100%; max-width: 600px; height: 600px; display: flex; justify-content: center; align-items: center;">
+                    <img src="/images/products/{{ $product->product_image }}" alt="{{ $product->name }}"
+                         style="max-width: 100%; max-height: 100%; object-fit: contain;" />
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center">
-                <div class="product-detail-desc pd-20 card-box height-100-p" style="margin-left: -2px;">
-                    <h4 class="mb-20 pt-20">{{ $product->name }}</h4>
-                    <p>{!! $product->summary !!}</p>
-                    <div class="price">
-                        @if ($product->compare_price)
-                            <del>${{ $product->compare_price }}</del>
-                        @endif
-                        <ins>${{ $product->price }}</ins>
+
+            <!-- Box chứa thông tin -->
+            <div class="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center justify-content-center">
+                <div class="product-detail-desc pd-20 card-box height-100-p"
+                     style="margin-left: -2px; width: 100%; max-width: 600px; height: 600px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <h4 class="mb-20 pt-20">{{ $product->name }}</h4>
+                        <p>{!! $product->summary !!}</p>
+                        <div class="price">
+                            @if ($product->compare_price)
+                                <del>${{ $product->compare_price }}</del>
+                            @endif
+                            <ins>${{ $product->price }}</ins>
+                        </div>
                     </div>
-                    <form action="{{ route('client.cart.add') }}" method="POST">
+                    <form action="{{ route('client.cart.add') }}" method="POST" style="margin-top: auto;">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="form-group">
@@ -39,6 +46,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Shop Information Section -->
     @if ($shop)
