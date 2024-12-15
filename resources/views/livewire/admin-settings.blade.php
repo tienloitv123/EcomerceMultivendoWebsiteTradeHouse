@@ -158,7 +158,7 @@
             </div>
             <div class="tab-pane fade {{ $tab == 'payment_methods' ? 'active show' : '' }}" id="payment_methods" role="tabpanel">
                 <div class="pd-20">
-                    ------ Payment methods ------
+                    ------ comming soon ------
                 </div>
             </div>
         </div>

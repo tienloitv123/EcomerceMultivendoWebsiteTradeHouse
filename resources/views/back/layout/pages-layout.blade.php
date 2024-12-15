@@ -15,6 +15,10 @@
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/icon-font.min.css" />
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/style.css" />
 
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         (function(w, d, s, l, i) {
             w[l] = w[l] || [];
@@ -32,7 +36,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.querySelector('.left-side-bar');
-            sidebar.style.backgroundColor = '#87CEFA'; 
+            sidebar.style.backgroundColor = '#87CEFA';
             sidebar.style.color = 'white';
         });
     </script>
@@ -195,6 +199,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{ route('admin.wallet.view') }}" class="dropdown-toggle no-arrow {{ Route::is('admin.wallet.view') ? 'active' : '' }}">
+                                <span class="micon bi bi-wallet2"></span><span class="mtext">Wallet</span>
+                            </a>
+                        </li>
+                        <li>
                             <div class="dropdown-divider"></div>
                         </li>
                         <li>
@@ -242,6 +251,12 @@
                                 <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Order List</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('seller.wallet.view') }}" class="dropdown-toggle no-arrow {{ Route::is('seller.wallet.view') ? 'active' : '' }}">
+                                <span class="micon bi bi-wallet2"></span><span class="mtext">My Wallet</span>
+                            </a>
+                        </li>
+
                         <li class="dropdown">
                             <a href="javascript:;"
                                 class="dropdown-toggle {{ Route::is('seller.product.*') ? 'active' : '' }}">

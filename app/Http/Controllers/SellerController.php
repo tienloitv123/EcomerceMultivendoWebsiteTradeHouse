@@ -14,6 +14,8 @@ use App\Models\VerificationToken;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use App\Models\Shop;
+use App\Models\TemporaryTransaction;
+use App\Models\Wallet;
 
 
 use constGuards;
@@ -492,6 +494,26 @@ public function updateOrderStatus(Request $request, $orderId)
         ->firstOrFail();
 
     $orderDetail->order->update(['status' => $request->status]);
+
+    // Hoàn tiền lại cho Client nếu đơn hàng bị từ chối
+    if ($request->status === 'rejected') {
+        $temporaryTransaction = TemporaryTransaction::where('order_id', $orderDetail->order_id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($temporaryTransaction) {
+            // Lấy ví của Client
+            $clientWallet = Wallet::find($temporaryTransaction->client_wallet_id);
+            if ($clientWallet) {
+                $clientWallet->balance += $temporaryTransaction->amount; // Hoàn lại số tiền
+                $clientWallet->save();
+
+                // Cập nhật trạng thái giao dịch tạm thời
+                $temporaryTransaction->status = 'rejected';
+                $temporaryTransaction->save();
+            }
+        }
+    }
 
     return redirect()->route('seller.orders.manage')
         ->with('success', 'Order status updated successfully.');

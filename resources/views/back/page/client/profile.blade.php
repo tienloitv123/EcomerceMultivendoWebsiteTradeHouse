@@ -34,16 +34,30 @@
                                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                                         <div class="pd-20 card-box height-100-p text-center">
                                             <div class="profile-photo position-relative">
-                                                <!-- Kích hoạt chọn file khi click vào icon pencil -->
                                                 <a href="javascript:;" onclick="event.preventDefault();document.getElementById('clientProfilePictureFile').click();" class="edit-avatar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <!-- Ảnh hồ sơ của client -->
-                                                <img src="{{ asset('images/users/clients/' . $client->picture) }}" alt="Profile Picture" class="avatar-photo rounded-circle mx-auto" id="clientProfilePicture" style="width: 140px; height: 140px;">
-                                                <!-- Input file ẩn để chọn ảnh mới -->
+                                                @php
+                                                    $clientImage = $client->picture;
+                                                    $imagePath = public_path('images/users/clients/' . $clientImage);
+                                                @endphp
+
+                                                @if ($clientImage && file_exists($imagePath))
+                                                    <img src="{{ asset('images/users/clients/' . $clientImage) }}"
+                                                         alt="Profile Picture"
+                                                         class="avatar-photo rounded-circle mx-auto"
+                                                         id="clientProfilePicture"
+                                                         style="width: 140px; height: 140px;">
+                                                @else
+                                                    <img src="{{ asset('images/users/default-avatar.png') }}"
+                                                         alt="Default Profile Picture"
+                                                         class="avatar-photo rounded-circle mx-auto"
+                                                         id="clientProfilePicture"
+                                                         style="width: 140px; height: 140px;">
+                                                @endif
+
                                                 <input type="file" name="clientProfilePictureFile" id="clientProfilePictureFile" class="d-none" style="opacity: 0;">
                                             </div>
-                                            <!-- Tên và email của client -->
                                             <h5 class="text-center h5 mb-0 mt-3" id="clientProfileName">{{ $client->name }}</h5>
                                             <p class="text-center text-muted font-14" id="clientProfileEmail">
                                                 {{ $client->email }}

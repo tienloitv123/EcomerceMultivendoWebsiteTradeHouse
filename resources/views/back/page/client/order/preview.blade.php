@@ -17,12 +17,21 @@
             <input type="text" name="phone" id="phone" class="form-control" value="{{ old('phone', $phone) }}" required>
         </div>
 
+        {{-- <div class="form-group">
+            <label for="payment_method">Payment method</label>
+            <select name="payment_method" id="payment_method" class="form-control" required>
+                <option value="COD" {{ $payment_method == 'COD' ? 'selected' : '' }}>Cash (COD)</option>
+                <option value="CreditCard" {{ $payment_method == 'CreditCard' ? 'selected' : '' }}>Credit card</option>
+                <option value="PayPal" {{ $payment_method == 'PayPal' ? 'selected' : '' }}>Momo</option>
+            </select>
+        </div> --}}
         <div class="form-group">
             <label for="payment_method">Payment method</label>
             <select name="payment_method" id="payment_method" class="form-control" required>
                 <option value="COD" {{ $payment_method == 'COD' ? 'selected' : '' }}>Cash (COD)</option>
                 <option value="CreditCard" {{ $payment_method == 'CreditCard' ? 'selected' : '' }}>Credit card</option>
                 <option value="PayPal" {{ $payment_method == 'PayPal' ? 'selected' : '' }}>Momo</option>
+                <option value="EWallet">eWallet (Balance: {{ number_format($clientWalletBalance, 2) }} USD)</option>
             </select>
         </div>
 

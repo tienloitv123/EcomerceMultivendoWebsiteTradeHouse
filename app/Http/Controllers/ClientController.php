@@ -15,6 +15,9 @@ use App\Models\Shop;
 use App\Models\CartDetail;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\TemporaryTransaction;
+use App\Models\Wallet;
+
 
 use App\Models\VerificationToken;
 use Illuminate\Support\Facades\File;
@@ -209,7 +212,7 @@ class ClientController extends Controller
 
     public function showCart()
     {
-        $cartShops = []; // Định nghĩa biến $cartShops mặc định là mảng rỗng
+        $cartShops = []; 
 
         $cart = Cart::where('client_id', auth('client')->id())->first();
 
@@ -323,12 +326,65 @@ public function removeItem(Request $request)
 }
 
 
- public function createOrder(Request $request)
+
+public function previewOrder(Request $request)
+{
+    $client = auth('client')->user();
+    $sellerId = $request->input('seller_id');
+
+    $cart = Cart::with(['cartDetails' => function ($query) use ($sellerId) {
+        $query->where('seller_id', $sellerId)->with('product');
+    }])->where('client_id', $client->id)->first();
+
+    if (!$cart || $cart->cartDetails->isEmpty()) {
+        return redirect()->route('client.cart')->with('fail', 'There are no product of this seller');
+    }
+
+    $totalAmount = $cart->cartDetails->sum(function ($detail) {
+        return $detail->quantity * $detail->product->price;
+    });
+
+    $clientWallet = Wallet::where('user_id', $client->id)->where('user_type', 'client')->first();
+    $clientWalletBalance = $clientWallet ? $clientWallet->balance : 0;
+
+    $paymentMethod = $request->input('payment_method', 'COD');
+    if ($paymentMethod === 'eWallet') {
+        $sellerWallet = Wallet::where('user_id', $sellerId)->where('user_type', 'seller')->first();
+
+        if (!$clientWallet || !$sellerWallet) {
+            return redirect()->route('client.cart')->with('fail', 'Wallet not found for Client or Seller.');
+        }
+
+        TemporaryTransaction::updateOrCreate(
+            [
+                'client_wallet_id' => $clientWallet->id,
+                'seller_wallet_id' => $sellerWallet->id,
+                'order_id' => null,
+            ],
+            [
+                'amount' => $totalAmount,
+                'status' => 'pending',
+            ]
+        );
+    }
+
+    return view('back.page.client.order.preview', [
+        'shipping_address' => $client->address,
+        'phone' => $client->phone,
+        'payment_method' => $paymentMethod,
+        'cartDetails' => $cart->cartDetails,
+        'totalAmount' => $totalAmount,
+        'seller_id' => $sellerId,
+        'clientWalletBalance' => $clientWalletBalance,
+    ]);
+}
+
+public function createOrder(Request $request)
 {
     $request->validate([
         'shipping_address' => 'required|min:5',
         'phone' => 'required|min:5',
-        'payment_method' => 'required|in:COD,CreditCard,PayPal',
+        'payment_method' => 'required|in:COD,CreditCard,PayPal,EWallet',
         'seller_id' => 'required|integer|exists:sellers,id',
     ]);
 
@@ -338,20 +394,57 @@ public function removeItem(Request $request)
     $cart = Cart::where('client_id', $client->id)->first();
     $cartDetails = $cart->cartDetails()->where('seller_id', $sellerId)->with('product')->get();
 
+    if ($cartDetails->isEmpty()) {
+        return redirect()->route('client.cart')->with('fail', 'Your cart is empty.');
+    }
+
     $totalAmount = $cartDetails->sum(function ($detail) {
         return $detail->quantity * $detail->product->price;
     });
 
+    // Tạo Order trước
     $order = Order::create([
         'client_id' => $client->id,
         'order_number' => 'ORDER-' . time() . '-' . rand(1000, 9999),
         'total_amount' => $totalAmount,
         'status' => 'pending',
         'payment_method' => $request->payment_method,
-        'payment_status' => 'unpaid',
+        'payment_status' => $request->payment_method === 'EWallet' ? 'paid' : 'unpaid',
         'shipping_address' => $request->shipping_address,
         'phone' => $request->phone,
     ]);
+
+    if ($request->payment_method === 'EWallet') {
+        // Kiểm tra ví Client
+        $wallet = Wallet::where('user_id', $client->id)->where('user_type', 'client')->first();
+        if (!$wallet) {
+            return redirect()->route('client.cart')->with('fail', 'Client wallet not found.');
+        }
+
+        // Kiểm tra số dư ví Client
+        if ($wallet->balance < $totalAmount) {
+            return redirect()->route('client.cart')->with('fail', 'Insufficient balance in your wallet.');
+        }
+
+        // Trừ tiền từ ví Client
+        $wallet->balance -= $totalAmount;
+        $wallet->save();
+
+        // Kiểm tra ví Seller
+        $sellerWallet = Wallet::where('user_id', $sellerId)->where('user_type', 'seller')->first();
+        if (!$sellerWallet) {
+            return redirect()->route('client.cart')->with('fail', 'Seller wallet not found.');
+        }
+
+        // Lưu giao dịch tạm thời
+        TemporaryTransaction::create([
+            'client_wallet_id' => $wallet->id,
+            'seller_wallet_id' => $sellerWallet->id,
+            'order_id' => $order->id, // Gắn với order vừa tạo
+            'amount' => $totalAmount,
+            'status' => 'pending',
+        ]);
+    }
 
     foreach ($cartDetails as $detail) {
         OrderDetail::create([
@@ -366,7 +459,7 @@ public function removeItem(Request $request)
 
     $cart->cartDetails()->where('seller_id', $sellerId)->delete();
 
-    // Gửi email cho client
+    // Gửi email cho Client
     $clientMailData = [
         'order' => $order,
         'orderDetails' => $order->orderDetails,
@@ -388,31 +481,39 @@ public function removeItem(Request $request)
     return redirect()->route('client.cart')->with('success', 'Your order has been created successfully!');
 }
 
-public function previewOrder(Request $request)
+public function markAsComplete(Request $request, $orderId)
 {
-    $client = auth('client')->user();
-    $sellerId = $request->input('seller_id'); // get seller_id
+    // Tìm order với trạng thái 'completed'
+    $order = Order::where('id', $orderId)->where('status', 'completed')->first();
 
-    $cart = Cart::with(['cartDetails' => function ($query) use ($sellerId) {
-        $query->where('seller_id', $sellerId)->with('product');
-    }])->where('client_id', $client->id)->first();
-
-    if (!$cart || $cart->cartDetails->isEmpty()) {
-        return redirect()->route('client.cart')->with('fail', 'Không có sản phẩm nào trong giỏ hàng của seller này.');
+    if (!$order) {
+        return redirect()->back()->with('fail', 'Order not found or not eligible for completion.');
     }
 
-    $totalAmount = $cart->cartDetails->sum(function ($detail) {
-        return $detail->quantity * $detail->product->price;
-    });
+    // Tìm giao dịch tạm thời liên quan
+    $temporaryTransaction = TemporaryTransaction::where('order_id', $order->id)
+        ->where('status', 'pending') // Trạng thái pending
+        ->first();
 
-    return view('back.page.client.order.preview', [
-        'shipping_address' => $client->address,
-        'phone' => $client->phone,
-        'payment_method' => 'COD',
-        'cartDetails' => $cart->cartDetails,
-        'totalAmount' => $totalAmount,
-        'seller_id' => $sellerId,
-    ]);
+    if (!$temporaryTransaction) {
+        return redirect()->back()->with('fail', 'No pending transaction found for this order.');
+    }
+
+    // Cập nhật trạng thái giao dịch tạm thời
+    $temporaryTransaction->status = 'complete';
+    $temporaryTransaction->save();
+
+    // Chuyển tiền từ ví Client sang ví Seller
+    $sellerWallet = Wallet::find($temporaryTransaction->seller_wallet_id);
+
+    if (!$sellerWallet) {
+        return redirect()->back()->with('fail', 'Seller wallet not found.');
+    }
+
+    $sellerWallet->balance += $temporaryTransaction->amount;
+    $sellerWallet->save();
+
+    return redirect()->back()->with('success', 'Order and transaction marked as complete. Funds transferred to seller.');
 }
 
 
@@ -436,19 +537,58 @@ public function updateOrderStatus(Request $request, $orderId)
 
     $action = $request->input('action');
 
+    // Hủy đơn hàng
     if ($action === 'cancel' && $order->status === 'pending') {
         $order->update(['status' => 'rejected']);
-        return redirect()->back()->with('success', 'Order canceled successfully.');
+
+        // Hoàn tiền cho Client nếu đã thanh toán qua eWallet
+        $temporaryTransaction = TemporaryTransaction::where('order_id', $order->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($temporaryTransaction) {
+            // Lấy ví của Client
+            $clientWallet = Wallet::find($temporaryTransaction->client_wallet_id);
+            if ($clientWallet) {
+                $clientWallet->balance += $temporaryTransaction->amount; // Hoàn lại số tiền
+                $clientWallet->save();
+
+                // Cập nhật trạng thái giao dịch tạm thời
+                $temporaryTransaction->status = 'rejected';
+                $temporaryTransaction->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Order canceled successfully. Funds refunded to wallet.');
     }
 
     if ($action === 'received' && $order->status === 'delivery') {
         $order->update(['status' => 'completed']);
-        return redirect()->back()->with('success', 'Order marked as received.');
+
+        $temporaryTransaction = TemporaryTransaction::where('order_id', $order->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$temporaryTransaction) {
+            return redirect()->back()->with('fail', 'No pending transaction found for this order.');
+        }
+
+        $temporaryTransaction->status = 'completed';
+        $temporaryTransaction->save();
+
+        $sellerWallet = Wallet::find($temporaryTransaction->seller_wallet_id);
+        if (!$sellerWallet) {
+            return redirect()->back()->with('fail', 'Seller wallet not found.');
+        }
+
+        $sellerWallet->balance += $temporaryTransaction->amount;
+        $sellerWallet->save();
+
+        return redirect()->back()->with('success', 'Order marked as received. Funds transferred to seller.');
     }
 
     return redirect()->back()->with('fail', 'Invalid action or order status.');
 }
-
 
 public function forgotPassword(Request $request) {
     $data = ['pageTitle' => 'Forgot Password'];
@@ -629,7 +769,6 @@ public function updatePassword(Request $request)
         'mail_body' => $mailBody
     ];
 
-    // Sử dụng hàm gửi email
     sendEmail($mailConfig);
 
     return redirect()->back()->with('success', 'Password updated successfully and email notification sent.');
